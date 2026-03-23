@@ -6,18 +6,31 @@
 
 ---
 
-## IMPORTANT: This is a Specification Document
+## AGENT INSTRUCTIONS
 
-**This file is a SPECIFICATION, not the tool itself.**
+**If you are an agent reading this specification:**
 
-- This document describes HOW a tool should work
-- Any agent/tool built from this spec MUST query the actual FedRAMP website at https://www.fedramp.gov/docs/rev5/
-- **DO NOT query this spec file for FedRAMP documentation content**
-- This spec file contains NO FedRAMP documentation - it only contains instructions
+This file contains the **guidelines** for how you should operate when monitoring and querying FedRAMP Rev5 documentation.
 
-**Data Source:**
-- ✅ **CORRECT:** Query https://www.fedramp.gov/docs/rev5/ for all FedRAMP content
-- ❌ **WRONG:** Query fedramp-rev5-spec.md (this file) for FedRAMP content
+**Your Role:**
+- Read this spec to understand your capabilities and constraints
+- Use the patterns, selectors, and strategies defined here as your operational framework
+
+**Data Source for User Queries:**
+- When users ask about FedRAMP documentation content (e.g., "Where does it talk about Collaborative Continuous Monitoring?")
+- **You MUST fetch that information from: https://www.fedramp.gov/docs/rev5/**
+- Use WebFetch or equivalent tools to retrieve content from the live website
+- This spec file contains guidelines for HOW you work, not the FedRAMP content itself
+
+**What This Spec Provides:**
+- ✅ Navigation structure to guide your queries
+- ✅ CSS selectors for extracting content
+- ✅ URL patterns for constructing requests
+- ✅ Rules for presenting results (factual data only, attribution, etc.)
+
+**What This Spec Does NOT Provide:**
+- ❌ The actual FedRAMP documentation content
+- ❌ Answers to user questions about FedRAMP policies/procedures
 
 ---
 
@@ -124,9 +137,9 @@ This ensures users can quickly understand what was modified, added, or removed b
 
 ## Query and Search Capabilities
 
-**CRITICAL: The tool must query the live FedRAMP website (https://www.fedramp.gov/docs/rev5/), NOT this specification file.**
+**For Agents: When a user asks about FedRAMP documentation, you must use WebFetch (or equivalent) to query https://www.fedramp.gov/docs/rev5/ and extract the information. This spec tells you HOW to query and present results, not WHAT the FedRAMP content says.**
 
-The tool provides query and search functionality to retrieve factual information from the website:
+The agent provides query and search functionality to retrieve factual information from the website:
 
 **Search Functions:**
 - **Document Search:** Find documents by title, type, or content keywords
@@ -169,13 +182,14 @@ URL: [Full URL]
 Retrieved: [Timestamp]
 ```
 
-**Query Constraints:**
-- **MUST query https://www.fedramp.gov/docs/rev5/** - the live website is the data source
-- **DO NOT query this specification file** - it contains no FedRAMP documentation content
+**Query Constraints (Agent Requirements):**
+- **Data Source:** Always fetch FedRAMP content from https://www.fedramp.gov/docs/rev5/ using WebFetch
+- **This Spec's Role:** Use the navigation structure, URL patterns, and selectors from this spec to construct your queries
 - Only return information that exists on the website
 - Never synthesize or paraphrase content
 - State clearly when information is not available
 - Provide source URLs for all returned information (must be fedramp.gov URLs)
+- Apply the "Factual Data Only" principles defined in this spec
 
 This ensures users receive accurate, verifiable information directly from the FedRAMP Rev5 documentation website.
 
