@@ -83,6 +83,28 @@ When changes are detected, users should be presented with comprehensive delta co
 
 This ensures users can quickly understand what was modified, added, or removed between versions.
 
+## Factual Data Only
+
+**Primary Rule: Factual Reporting**
+- The tool MUST ALWAYS provide factual information derived directly from git data
+- Observable facts are the foundation: commits, diffs, file changes, timestamps, authors, branches, tags
+- If information is not available or unclear, explicitly state "Information not available"
+
+**What to Report:**
+- Commit hashes, messages, authors, and timestamps
+- Exact file additions, deletions, and modifications
+- Line-by-line diffs showing actual content changes
+- Branch names, tags, and merge information
+- File sizes, paths, and reorganizations
+
+**What NOT to Report:**
+- Assumptions about intent or purpose of changes
+- Interpretations of why changes were made
+- Predictions about future changes
+- Subjective characterizations beyond observable data
+
+**Principle:** Report what IS, not what might be or what we think it means.
+
 ## Navigation Structure
 
 ### General Info
