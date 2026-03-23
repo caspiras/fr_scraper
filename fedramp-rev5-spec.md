@@ -93,11 +93,13 @@ Agent:
 ```
 
 **What to Monitor for Changes:**
-- Document content (text, sections, headings)
-- New or removed documents
+- **All pages** under /docs/rev5/ (see "Monitoring Targets" section for complete scope)
+- Document content (text, sections, headings) on every page
+- New or removed pages/documents at any depth
 - Updated PDFs or templates
 - Navigation structure modifications
 - Metadata changes (titles, dates)
+- Changes at any level of the site hierarchy
 
 **What NOT to Monitor:**
 - This specification file (fedramp-rev5-spec.md)
@@ -111,11 +113,103 @@ Agent:
 - **Trend Analysis:** Patterns in documentation updates over time
 
 ### Monitoring Targets
-- Playbook content (HTML pages)
+
+**Scope: ALL pages under https://www.fedramp.gov/docs/rev5/**
+
+The agent must monitor ALL pages within the /docs/rev5/ path, including:
+
+**Main Index:**
+- https://www.fedramp.gov/docs/rev5/ (landing page)
+
+**All Subpages and Nested Paths:**
+- All playbook pages: `/docs/rev5/playbook/**/*`
+  - Example: `/docs/rev5/playbook/csp/authorization/getting-started/`
+  - Example: `/docs/rev5/playbook/csp/authorization/ssp/`
+  - Example: `/docs/rev5/playbook/agency/marketplace/overview/`
+- All documentation sections under /docs/rev5/
+- All nested subdirectories and their contents
+
+**Discovery Strategy:**
+1. **Start at Base URL:** https://www.fedramp.gov/docs/rev5/
+2. **Follow All Links:** Recursively follow all internal links that stay within /docs/rev5/
+3. **Build Page Inventory:** Maintain a list of all discovered pages
+4. **Monitor Each Page:** Check every discovered page for changes on each monitoring run
+5. **Detect New Pages:** Identify when new pages are added to the site
+6. **Detect Removed Pages:** Identify when pages are deleted or return 404
+
+**Content Types to Monitor:**
+- HTML pages (all playbooks, guides, documentation)
 - PDF document downloads
 - Navigation structure changes
 - Document metadata (titles, descriptions, dates)
 - Site architecture modifications
+
+**Monitoring Depth:**
+- **Unlimited depth** - follow links recursively through all levels
+- Monitor pages at any depth under /docs/rev5/
+- Example depths:
+  - Level 1: /docs/rev5/
+  - Level 2: /docs/rev5/playbook/
+  - Level 3: /docs/rev5/playbook/csp/
+  - Level 4: /docs/rev5/playbook/csp/authorization/
+  - Level 5: /docs/rev5/playbook/csp/authorization/getting-started/
+  - And deeper as needed
+
+**Exclusions:**
+- External links (outside fedramp.gov domain)
+- Links outside /docs/rev5/ path
+- Static assets (images, CSS, JS) - unless specifically relevant to content
+
+### Monitoring Workflow
+
+**Step-by-Step Process for Comprehensive Change Detection:**
+
+1. **Initial Crawl (First Check):**
+   - Start at https://www.fedramp.gov/docs/rev5/
+   - Extract all links pointing to /docs/rev5/* pages
+   - Follow each link and extract more links
+   - Continue recursively until all pages discovered
+   - Store complete inventory of all pages found
+   - Save snapshot of each page's content
+
+2. **Subsequent Checks (When User Asks About Changes):**
+   - Retrieve stored page inventory from last check
+   - Re-crawl starting from https://www.fedramp.gov/docs/rev5/
+   - Discover current page inventory
+   - **Compare inventories:**
+     - Identify new pages (in current, not in stored)
+     - Identify removed pages (in stored, not in current)
+     - Identify existing pages to check for content changes
+   - **For each existing page:**
+     - Fetch current content
+     - Compare to stored snapshot
+     - Record any differences
+   - Report all changes found across all pages
+
+3. **Example of Comprehensive Detection:**
+   ```
+   User: "Have there been any changes?"
+
+   Agent actions:
+   - Crawls /docs/rev5/ and discovers 47 pages total
+   - Compares to 45 pages from last check
+   - Finds: 2 new pages added
+   - Checks all 45 existing pages for content changes
+   - Detects:
+     - /playbook/csp/authorization/getting-started/ - content updated
+     - /playbook/agency/sponsorship/ - section added
+     - /balance-improvement/ - new page (1 of 2 new)
+     - /continuous-monitoring-guide/ - new page (2 of 2 new)
+
+   Agent reports:
+   "Changes to FedRAMP website since [last check time]:
+   - 2 new pages added
+   - 2 existing pages modified
+   - 0 pages removed
+   [Details of each change...]"
+   ```
+
+**This ensures NO changes are missed, regardless of page depth or location.**
 
 ## Tracking Features
 
