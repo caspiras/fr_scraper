@@ -197,19 +197,6 @@ Optional and mandatory enhancements bringing modern requirements from FedRAMP 20
 - audience
 - last_modified
 - content_summary
-- file_hash (for change detection)
-- file_size
-- last_checked
-- change_detected
-- version_number
-
-### Change Tracking Fields
-- previous_hash
-- current_hash
-- change_timestamp
-- change_type (added, modified, deleted)
-- diff_summary
-- affected_sections
 
 ## Best Practices
 
@@ -240,12 +227,3 @@ Optional and mandatory enhancements bringing modern requirements from FedRAMP 20
 - Playbooks are the primary document format
 - Check for PDF downloads in addition to HTML content
 - Site structure may change; verify selectors periodically
-
-### Monitoring Best Practices
-- **Scheduled Checks:** Run monitoring at regular intervals (e.g., daily, weekly)
-- **Hash Comparison:** Use file hashing to detect content changes efficiently
-- **Incremental Updates:** Only process changed documents to minimize bandwidth
-- **Error Handling:** Gracefully handle 404s, timeouts, and site restructuring
-- **Notification System:** Alert when significant changes are detected
-- **Git Integration:** Store snapshots in git for full version control and diff capabilities
-- **Metadata Preservation:** Always capture last-modified headers when available
