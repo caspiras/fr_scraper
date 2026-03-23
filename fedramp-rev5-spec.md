@@ -129,13 +129,26 @@ The tool provides query and search functionality to retrieve factual information
 - Location information (section, heading, line number)
 - Context surrounding matched content
 - Links to full document sources
+- **Section identification:** Specify which section/category contains the information
 
 **Result Presentation:**
 - All results must be factual extracts from the website
 - Quote marks around verbatim text excerpts
 - Clear attribution to source document and location
+- **Section context:** Include the section name where information was found
+  - Example: "Found in Balance Improvement Program (BIP)"
+  - Example: "Found in Cloud Service Providers > Authorization Package"
+  - Example: "Found in Agencies > Sponsorship"
 - Timestamps showing when data was retrieved
 - "No results found" when queries return nothing
+
+**Location Attribution Format:**
+```
+Section: [Section Name]
+Document: [Document Title]
+URL: [Full URL]
+Retrieved: [Timestamp]
+```
 
 **Query Constraints:**
 - Only return information that exists on the website
