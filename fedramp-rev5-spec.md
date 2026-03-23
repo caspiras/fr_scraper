@@ -1,19 +1,50 @@
-# FedRAMP Rev5 Documentation Query Specification
+# FedRAMP Rev5 Documentation Monitoring Specification
 
 **Target:** https://www.fedramp.gov/docs/rev5/
 **Created:** 2026-03-23
 **Version:** Rev5
 
+## Purpose
+
+A lightweight tool that monitors the FedRAMP REV 5 websites for documentation-focused projects, providing detailed tracking of file changes, history and change activity.
+
 ## Metadata
 
 | Property | Value |
 |----------|-------|
-| Name | FedRAMP Rev5 Documentation |
+| Name | FedRAMP Rev5 Documentation Monitor |
 | Base URL | https://www.fedramp.gov |
 | Docs Path | /docs/rev5/ |
 | Full URL | https://www.fedramp.gov/docs/rev5/ |
 | Version | Rev5 |
-| Description | Query specification for FedRAMP Revision 5 documentation and resources |
+| Description | Monitoring specification for tracking FedRAMP Revision 5 documentation changes and updates |
+
+## Monitoring Capabilities
+
+### File Change Tracking
+- **Document Updates:** Monitor when playbooks, templates, and guides are modified
+- **New Content:** Detect when new documents are added to the site
+- **Deletions:** Track when documents are removed or deprecated
+- **Content Diff:** Compare document versions to identify specific changes
+
+### History Tracking
+- **Version History:** Maintain historical snapshots of document states
+- **Timestamp Recording:** Track when changes occur with precise timestamps
+- **Change Attribution:** Record what changed, when, and where on the site
+- **Audit Trail:** Comprehensive log of all monitored changes
+
+### Change Activity Metrics
+- **Update Frequency:** Track how often specific documents are updated
+- **Change Volume:** Measure the extent of changes (additions, deletions, modifications)
+- **Hot Spots:** Identify frequently updated sections or document types
+- **Trend Analysis:** Patterns in documentation updates over time
+
+### Monitoring Targets
+- Playbook content (HTML pages)
+- PDF document downloads
+- Navigation structure changes
+- Document metadata (titles, descriptions, dates)
+- Site architecture modifications
 
 ## Navigation Structure
 
@@ -166,6 +197,19 @@ Optional and mandatory enhancements bringing modern requirements from FedRAMP 20
 - audience
 - last_modified
 - content_summary
+- file_hash (for change detection)
+- file_size
+- last_checked
+- change_detected
+- version_number
+
+### Change Tracking Fields
+- previous_hash
+- current_hash
+- change_timestamp
+- change_type (added, modified, deleted)
+- diff_summary
+- affected_sections
 
 ## Best Practices
 
@@ -189,9 +233,19 @@ Optional and mandatory enhancements bringing modern requirements from FedRAMP 20
 
 ## Important Notes
 
+### Site Characteristics
 - The site uses tab-based navigation with local storage for preferences
 - Balance Improvement Releases bridge FedRAMP 20x and Rev5
 - Content is organized by audience (CSP vs Agency)
 - Playbooks are the primary document format
 - Check for PDF downloads in addition to HTML content
 - Site structure may change; verify selectors periodically
+
+### Monitoring Best Practices
+- **Scheduled Checks:** Run monitoring at regular intervals (e.g., daily, weekly)
+- **Hash Comparison:** Use file hashing to detect content changes efficiently
+- **Incremental Updates:** Only process changed documents to minimize bandwidth
+- **Error Handling:** Gracefully handle 404s, timeouts, and site restructuring
+- **Notification System:** Alert when significant changes are detected
+- **Git Integration:** Store snapshots in git for full version control and diff capabilities
+- **Metadata Preservation:** Always capture last-modified headers when available
