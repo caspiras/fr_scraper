@@ -56,6 +56,38 @@ The **FedRAMP Rev5 Documentation Monitor** is a monitoring specification designe
 - **Change Attribution:** Record what changed, when, and where on the site
 - **Audit Trail:** Comprehensive log of all monitored changes
 
+### Temporal Change Tracking
+
+**Agent Requirement: Track Last Check Timestamp**
+
+When a user asks "Have there been any changes?" or "What's new?", the agent must:
+
+1. **Store Last Check Time:** Record the timestamp of each monitoring check
+2. **Compare Against Previous State:** When asked about changes, compare current state to the state from the last check
+3. **Report Only New Changes:** Show only what has changed since the last time the user asked
+4. **First-Time Check:** If this is the first check, state: "This is the first check. Establishing baseline." and provide the current state
+5. **Time Reference:** Always include the timeframe in change reports
+   - Example: "Changes detected since last check on [timestamp]"
+   - Example: "No changes detected since [timestamp]"
+
+**Storage Requirements:**
+- Persist last check timestamp across sessions
+- Store snapshot of website state at each check
+- Track per-user or per-session to avoid mixing different users' check histories
+
+**Example Interaction:**
+```
+User: "Have there been any changes?"
+Agent:
+- Retrieves last check timestamp: 2026-03-20 14:30:00
+- Fetches current state from website
+- Compares current vs. stored state from 2026-03-20
+- Reports: "Changes detected since last check on March 20, 2026 at 2:30 PM:
+  - Document X was updated
+  - New document Y was added
+  - Section Z was modified"
+```
+
 ### Change Activity Metrics
 - **Update Frequency:** Track how often specific documents are updated
 - **Change Volume:** Measure the extent of changes (additions, deletions, modifications)
@@ -87,7 +119,7 @@ The **FedRAMP Rev5 Documentation Monitor** is a monitoring specification designe
 
 ## Change Presentation
 
-When changes are detected, users should be presented with comprehensive delta comparisons:
+When changes are detected (comparing current state to last check), users should be presented with comprehensive delta comparisons:
 
 **Change Reports Include:**
 - **Side-by-side Comparison:** Previous version vs. current version
@@ -103,8 +135,9 @@ When changes are detected, users should be presented with comprehensive delta co
 - Summary statistics (lines added/removed, files affected)
 - Links to full previous and current versions
 - Timestamp and change attribution
+- **Time Range:** Explicitly state "Changes since [last check timestamp]" or "No changes since [last check timestamp]"
 
-This ensures users can quickly understand what was modified, added, or removed between versions.
+This ensures users can quickly understand what was modified, added, or removed since their last check.
 
 ## Factual Data Only
 
