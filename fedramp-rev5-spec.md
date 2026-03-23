@@ -58,21 +58,24 @@ The **FedRAMP Rev5 Documentation Monitor** is a monitoring specification designe
 
 ### Temporal Change Tracking
 
-**Agent Requirement: Track Last Check Timestamp**
+**Agent Requirement: Track Website Changes Since Last Check**
+
+**CRITICAL: "Changes" means changes to the FedRAMP website content at https://www.fedramp.gov/docs/rev5/, NOT changes to this spec file.**
 
 When a user asks "Have there been any changes?" or "What's new?", the agent must:
 
-1. **Store Last Check Time:** Record the timestamp of each monitoring check
-2. **Compare Against Previous State:** When asked about changes, compare current state to the state from the last check
-3. **Report Only New Changes:** Show only what has changed since the last time the user asked
-4. **First-Time Check:** If this is the first check, state: "This is the first check. Establishing baseline." and provide the current state
-5. **Time Reference:** Always include the timeframe in change reports
-   - Example: "Changes detected since last check on [timestamp]"
-   - Example: "No changes detected since [timestamp]"
+1. **Fetch Current Website State:** Use WebFetch to retrieve current content from https://www.fedramp.gov/docs/rev5/
+2. **Retrieve Last Snapshot:** Load the stored snapshot of the website from the last time the user asked
+3. **Compare Website States:** Compare the current website content to the stored website snapshot
+4. **Report Website Changes Only:** Show only what changed on the FedRAMP website since last check
+5. **First-Time Check:** If this is the first check, state: "This is the first check of the FedRAMP website. Establishing baseline." then fetch and store current state
+6. **Time Reference:** Always include the timeframe in change reports
+   - Example: "Changes to the FedRAMP website since last check on [timestamp]"
+   - Example: "No changes to the FedRAMP website since [timestamp]"
 
 **Storage Requirements:**
 - Persist last check timestamp across sessions
-- Store snapshot of website state at each check
+- **Store snapshot of WEBSITE CONTENT at each check** (fetched from https://www.fedramp.gov/docs/rev5/)
 - Track per-user or per-session to avoid mixing different users' check histories
 
 **Example Interaction:**
@@ -80,13 +83,26 @@ When a user asks "Have there been any changes?" or "What's new?", the agent must
 User: "Have there been any changes?"
 Agent:
 - Retrieves last check timestamp: 2026-03-20 14:30:00
-- Fetches current state from website
-- Compares current vs. stored state from 2026-03-20
-- Reports: "Changes detected since last check on March 20, 2026 at 2:30 PM:
-  - Document X was updated
-  - New document Y was added
-  - Section Z was modified"
+- Retrieves stored website snapshot from 2026-03-20
+- Fetches current website state from https://www.fedramp.gov/docs/rev5/
+- Compares current website vs. stored website snapshot
+- Reports: "Changes to the FedRAMP website since last check on March 20, 2026 at 2:30 PM:
+  - Playbook 'Authorization Process' was updated
+  - New document 'Security Assessment Guide' was added
+  - Balance Improvement Program section was modified"
 ```
+
+**What to Monitor for Changes:**
+- Document content (text, sections, headings)
+- New or removed documents
+- Updated PDFs or templates
+- Navigation structure modifications
+- Metadata changes (titles, dates)
+
+**What NOT to Monitor:**
+- This specification file (fedramp-rev5-spec.md)
+- Local project files
+- Agent code or configuration
 
 ### Change Activity Metrics
 - **Update Frequency:** Track how often specific documents are updated
