@@ -46,6 +46,22 @@ A lightweight tool that monitors the FedRAMP REV 5 websites for documentation-fo
 - Document metadata (titles, descriptions, dates)
 - Site architecture modifications
 
+## Tracking Features
+
+**Tracks:**
+- New, modified, and deleted documentation files
+- Line-by-line changes in specific files
+- File reorganizations and structure changes
+- Commit history, authors, and timestamps
+- Branch activity and releases
+- Configuration and build file changes
+
+**Optimized For:**
+- Documentation-heavy repositories (Markdown, MDX, etc.)
+- Identifying new content additions
+- Understanding documentation evolution
+- Tracking contributor activity
+
 ## Navigation Structure
 
 ### General Info
