@@ -52,15 +52,15 @@ A lightweight tool that monitors the FedRAMP REV 5 websites for documentation-fo
 - New, modified, and deleted documentation files
 - Line-by-line changes in specific files
 - File reorganizations and structure changes
-- Commit history, authors, and timestamps
-- Branch activity and releases
+- Change history and timestamps
+- Version updates and releases
 - Configuration and build file changes
 
 **Optimized For:**
-- Documentation-heavy repositories (Markdown, MDX, etc.)
+- Documentation-heavy websites (Markdown, MDX, etc.)
 - Identifying new content additions
 - Understanding documentation evolution
-- Tracking contributor activity
+- Tracking update activity
 
 ## Change Presentation
 
@@ -86,15 +86,15 @@ This ensures users can quickly understand what was modified, added, or removed b
 ## Factual Data Only
 
 **Primary Rule: Factual Reporting**
-- The tool MUST ALWAYS provide factual information derived directly from git data
-- Observable facts are the foundation: commits, diffs, file changes, timestamps, authors, branches, tags
+- The tool MUST ALWAYS provide factual information derived directly from the website
+- Observable facts are the foundation: changes, diffs, file updates, timestamps, versions
 - If information is not available or unclear, explicitly state "Information not available"
 
 **What to Report:**
-- Commit hashes, messages, authors, and timestamps
+- Change records, timestamps, and version information
 - Exact file additions, deletions, and modifications
 - Line-by-line diffs showing actual content changes
-- Branch names, tags, and merge information
+- Version identifiers and update information
 - File sizes, paths, and reorganizations
 
 **What NOT to Report:**
