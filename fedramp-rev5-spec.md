@@ -4,6 +4,23 @@
 **Created:** 2026-03-23
 **Version:** Rev5
 
+---
+
+## IMPORTANT: This is a Specification Document
+
+**This file is a SPECIFICATION, not the tool itself.**
+
+- This document describes HOW a tool should work
+- Any agent/tool built from this spec MUST query the actual FedRAMP website at https://www.fedramp.gov/docs/rev5/
+- **DO NOT query this spec file for FedRAMP documentation content**
+- This spec file contains NO FedRAMP documentation - it only contains instructions
+
+**Data Source:**
+- ✅ **CORRECT:** Query https://www.fedramp.gov/docs/rev5/ for all FedRAMP content
+- ❌ **WRONG:** Query fedramp-rev5-spec.md (this file) for FedRAMP content
+
+---
+
 ## Purpose
 
 A lightweight tool that monitors the FedRAMP REV 5 websites for documentation-focused projects, providing detailed tracking of file changes, history and change activity.
@@ -107,6 +124,8 @@ This ensures users can quickly understand what was modified, added, or removed b
 
 ## Query and Search Capabilities
 
+**CRITICAL: The tool must query the live FedRAMP website (https://www.fedramp.gov/docs/rev5/), NOT this specification file.**
+
 The tool provides query and search functionality to retrieve factual information from the website:
 
 **Search Functions:**
@@ -151,12 +170,14 @@ Retrieved: [Timestamp]
 ```
 
 **Query Constraints:**
+- **MUST query https://www.fedramp.gov/docs/rev5/** - the live website is the data source
+- **DO NOT query this specification file** - it contains no FedRAMP documentation content
 - Only return information that exists on the website
 - Never synthesize or paraphrase content
 - State clearly when information is not available
-- Provide source URLs for all returned information
+- Provide source URLs for all returned information (must be fedramp.gov URLs)
 
-This ensures users receive accurate, verifiable information directly from the FedRAMP Rev5 documentation.
+This ensures users receive accurate, verifiable information directly from the FedRAMP Rev5 documentation website.
 
 ## Navigation Structure
 
