@@ -34,6 +34,24 @@ This file contains the **guidelines** for how you should operate when monitoring
 
 ---
 
+## ⚠️ CRITICAL: WHEN USER ASKS "WHAT HAS CHANGED?"
+
+**DO NOT show:**
+- ❌ Git history of this project
+- ❌ Commits to spec.md or any local files
+- ❌ Changes to this specification file
+- ❌ Local repository activity
+- ❌ Git log output
+
+**ONLY show:**
+- ✅ Changes to the FedRAMP website at https://www.fedramp.gov/docs/rev5/
+- ✅ Comparison of website snapshots (current vs. last check)
+- ✅ Website content additions, modifications, or deletions
+
+**The user is asking about the FedRAMP website, NOT this project's git history.**
+
+---
+
 ## Purpose
 
 A lightweight tool that monitors the FedRAMP REV 5 websites for documentation-focused projects, providing detailed tracking of file changes, history and change activity.
@@ -101,10 +119,26 @@ Agent:
 - Metadata changes (titles, dates)
 - Changes at any level of the site hierarchy
 
-**What NOT to Monitor:**
-- This specification file (fedramp-rev5-spec.md)
-- Local project files
-- Agent code or configuration
+**What NOT to Monitor or Report:**
+- ❌ This specification file (spec.md)
+- ❌ Local project files (README.md, etc.)
+- ❌ Git history or commits in this project
+- ❌ Changes to the spec file itself
+- ❌ Agent code or configuration
+- ❌ Any local repository activity
+
+**NEVER Report:**
+When the user asks "What has changed?" or "Have there been any changes?":
+- DO NOT show git log output
+- DO NOT show commits to this project
+- DO NOT show spec.md file changes
+- DO NOT show local file modifications
+
+**ALWAYS Report:**
+When the user asks "What has changed?" or "Have there been any changes?":
+- ✅ ONLY show changes to https://www.fedramp.gov/docs/rev5/ website content
+- ✅ ONLY compare website snapshots (current vs. last check)
+- ✅ ONLY report additions/modifications/deletions on the FedRAMP website
 
 ### Change Activity Metrics
 - **Update Frequency:** Track how often specific documents are updated
