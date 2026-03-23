@@ -36,25 +36,68 @@ This file contains the **guidelines** for how you should operate when monitoring
 
 ## ⚠️ CRITICAL: WHEN USER ASKS "WHAT HAS CHANGED?"
 
-**DO NOT show:**
-- ❌ Git history of this project
-- ❌ Commits to spec.md or any local files
-- ❌ Changes to this specification file
-- ❌ Local repository activity
-- ❌ Git log output
+### ❌ ABSOLUTELY FORBIDDEN - NEVER DO THIS:
 
-**ONLY show:**
-- ✅ Changes to the FedRAMP website at https://www.fedramp.gov/docs/rev5/
-- ✅ Comparison of website snapshots (current vs. last check)
-- ✅ Website content additions, modifications, or deletions
+When the user asks "What has changed?" or "Have there been any changes?":
 
-**The user is asking about the FedRAMP website, NOT this project's git history.**
+**NEVER run these commands:**
+- `git log`
+- `git status`
+- `git diff`
+- Any git command whatsoever
+
+**NEVER show:**
+- Git commit history (commit hashes, commit messages)
+- Information about spec.md file changes
+- Information about this project's repository
+- Local file modifications
+- Working tree status
+- Branch information
+- .DS_Store or other local files
+
+**NEVER say things like:**
+- "Latest commit: 94cd22a..."
+- "This repo (frdocs-project)..."
+- "Working tree: main is clean..."
+- "Earlier commits..."
+- Any reference to git activity in this project
+
+### ✅ REQUIRED BEHAVIOR:
+
+When the user asks "What has changed?" you MUST:
+
+1. **Use WebFetch** to retrieve current content from https://www.fedramp.gov/docs/rev5/
+2. **Compare** current website content to stored website snapshot from last check
+3. **Report ONLY** changes to the FedRAMP website content
+
+**Example correct response:**
+```
+Checking FedRAMP website for changes since last check on [timestamp]...
+
+[After fetching from https://www.fedramp.gov/docs/rev5/]
+
+Changes detected:
+- New page added: /docs/rev5/playbook/csp/new-guide/
+- Modified: /docs/rev5/balance-improvement/ (section updated)
+- No other changes detected across 47 monitored pages
+```
+
+**Example WRONG response (NEVER DO THIS):**
+```
+This repo (frdocs-project)
+Latest commit: 94cd22a...
+Earlier commits...
+```
 
 ---
 
 ## Purpose
 
 A lightweight tool that monitors the FedRAMP REV 5 websites for documentation-focused projects, providing detailed tracking of file changes, history and change activity.
+
+**🚨 THIS TOOL MONITORS: https://www.fedramp.gov/docs/rev5/ (the FedRAMP website)**
+
+**🚫 THIS TOOL DOES NOT MONITOR: This git repository, spec.md, local files, or project history**
 
 ## Summary
 
@@ -78,7 +121,18 @@ The **FedRAMP Rev5 Documentation Monitor** is a monitoring specification designe
 
 **Agent Requirement: Track Website Changes Since Last Check**
 
-**CRITICAL: "Changes" means changes to the FedRAMP website content at https://www.fedramp.gov/docs/rev5/, NOT changes to this spec file.**
+**🚨 CRITICAL: "Changes" means changes to the FedRAMP website content at https://www.fedramp.gov/docs/rev5/, NOT changes to this spec file or git repository.**
+
+**🚫 FORBIDDEN ACTIONS WHEN USER ASKS ABOUT CHANGES:**
+- DO NOT run `git log`, `git status`, or any git commands
+- DO NOT check this project's repository
+- DO NOT report on spec.md, README.md, or any local files
+- DO NOT show commit history or git information
+
+**✅ REQUIRED ACTIONS WHEN USER ASKS ABOUT CHANGES:**
+- Use WebFetch to query https://www.fedramp.gov/docs/rev5/
+- Compare current website to stored website snapshot
+- Report ONLY FedRAMP website changes
 
 When a user asks "Have there been any changes?" or "What's new?", the agent must:
 
