@@ -38,16 +38,9 @@ This file contains the **guidelines** for how you should operate when monitoring
 
 A lightweight tool that monitors the FedRAMP REV 5 websites for documentation-focused projects, providing detailed tracking of file changes, history and change activity.
 
-## Metadata
+## Summary
 
-| Property | Value |
-|----------|-------|
-| Name | FedRAMP Rev5 Documentation Monitor |
-| Base URL | https://www.fedramp.gov |
-| Docs Path | /docs/rev5/ |
-| Full URL | https://www.fedramp.gov/docs/rev5/ |
-| Version | Rev5 |
-| Description | Monitoring specification for tracking FedRAMP Revision 5 documentation changes and updates |
+The **FedRAMP Rev5 Documentation Monitor** is a monitoring specification designed to track FedRAMP Revision 5 documentation changes and updates. This tool targets the FedRAMP Rev5 documentation site at https://www.fedramp.gov/docs/rev5/, providing comprehensive monitoring of the `/docs/rev5/` path. The current specification version is Rev5 and serves as the operational framework for tracking file changes, history, and update activity across the entire FedRAMP documentation ecosystem.
 
 ## Monitoring Capabilities
 
