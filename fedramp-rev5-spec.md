@@ -105,6 +105,46 @@ This ensures users can quickly understand what was modified, added, or removed b
 
 **Principle:** Report what IS, not what might be or what we think it means.
 
+## Query and Search Capabilities
+
+The tool provides query and search functionality to retrieve factual information from the website:
+
+**Search Functions:**
+- **Document Search:** Find documents by title, type, or content keywords
+- **Content Search:** Locate specific text, sections, or terminology within documents
+- **Metadata Search:** Query by document type, audience, category, or date
+- **URL Search:** Find documents by path patterns or specific URLs
+- **Version Search:** Locate specific versions or historical snapshots
+
+**Query Types:**
+- Natural language queries about document content
+- Structured queries using filters (type, audience, date range)
+- Boolean searches (AND, OR, NOT operations)
+- Exact phrase matching
+- Pattern-based searches using wildcards
+
+**Search Results:**
+- Direct excerpts from matched documents (verbatim text)
+- Document metadata (title, URL, type, last modified date)
+- Location information (section, heading, line number)
+- Context surrounding matched content
+- Links to full document sources
+
+**Result Presentation:**
+- All results must be factual extracts from the website
+- Quote marks around verbatim text excerpts
+- Clear attribution to source document and location
+- Timestamps showing when data was retrieved
+- "No results found" when queries return nothing
+
+**Query Constraints:**
+- Only return information that exists on the website
+- Never synthesize or paraphrase content
+- State clearly when information is not available
+- Provide source URLs for all returned information
+
+This ensures users receive accurate, verifiable information directly from the FedRAMP Rev5 documentation.
+
 ## Navigation Structure
 
 ### General Info
