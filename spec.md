@@ -36,9 +36,33 @@ This file contains the **guidelines** for how you should operate when monitoring
 
 ## ⚠️ CRITICAL: WHEN USER ASKS "WHAT HAS CHANGED?"
 
+### 📍 DEFINITION: "THE WEBSITE" MEANS
+
+When the user asks about "changes" or "the website", they mean **EXCLUSIVELY**:
+
+**THE WEBSITE =**
+- https://www.fedramp.gov/docs/rev5/ (base page)
+- **AND ALL associated pages under /docs/rev5/**
+  - https://www.fedramp.gov/docs/rev5/playbook/csp/authorization/getting-started/
+  - https://www.fedramp.gov/docs/rev5/playbook/csp/authorization/ssp/
+  - https://www.fedramp.gov/docs/rev5/playbook/agency/marketplace/overview/
+  - https://www.fedramp.gov/docs/rev5/balance-improvement/
+  - **Every page at any depth under /docs/rev5/**
+
+**THE WEBSITE DOES NOT MEAN:**
+- ❌ This git repository
+- ❌ The spec.md file
+- ❌ Local project files
+- ❌ Any other website
+- ❌ This frdocs-project
+
+**When user says: "What has changed on the website?"**
+- They mean: "What changed on https://www.fedramp.gov/docs/rev5/ and all its pages?"
+- They DO NOT mean: "What changed in this git repo?"
+
 ### ❌ ABSOLUTELY FORBIDDEN - NEVER DO THIS:
 
-When the user asks "What has changed?" or "Have there been any changes?":
+When the user asks "What has changed?" or "Have there been any changes?" or "What has changed on the website?":
 
 **NEVER run these commands:**
 - `git log`
@@ -64,22 +88,27 @@ When the user asks "What has changed?" or "Have there been any changes?":
 
 ### ✅ REQUIRED BEHAVIOR:
 
-When the user asks "What has changed?" you MUST:
+When the user asks "What has changed?" or "What has changed on the website?" you MUST:
 
-1. **Use WebFetch** to retrieve current content from https://www.fedramp.gov/docs/rev5/
-2. **Compare** current website content to stored website snapshot from last check
-3. **Report ONLY** changes to the FedRAMP website content
+1. **Understand "the website" = https://www.fedramp.gov/docs/rev5/ and ALL associated pages**
+2. **Use WebFetch** to retrieve current content from the FedRAMP website (base + all subpages)
+3. **Compare** current FedRAMP website content to stored website snapshot from last check
+4. **Report ONLY** changes to the FedRAMP website content (pages added/modified/deleted)
+5. **Never check** this git repository, spec.md, or any local files
 
 **Example correct response:**
 ```
-Checking FedRAMP website for changes since last check on [timestamp]...
+User: "What has changed on the website?"
 
-[After fetching from https://www.fedramp.gov/docs/rev5/]
+Agent: Checking the FedRAMP website (https://www.fedramp.gov/docs/rev5/ and all associated pages) for changes since last check on March 20, 2026 at 2:30 PM...
 
-Changes detected:
-- New page added: /docs/rev5/playbook/csp/new-guide/
-- Modified: /docs/rev5/balance-improvement/ (section updated)
-- No other changes detected across 47 monitored pages
+[Fetches current state from https://www.fedramp.gov/docs/rev5/ and all subpages]
+
+Changes detected on the FedRAMP website:
+- New page added: https://www.fedramp.gov/docs/rev5/playbook/csp/new-guide/
+- Modified: https://www.fedramp.gov/docs/rev5/balance-improvement/ (section "Requirements" updated)
+- Modified: https://www.fedramp.gov/docs/rev5/playbook/csp/authorization/getting-started/ (new paragraph added)
+- No other changes detected across 47 monitored pages on the FedRAMP website
 ```
 
 **Example WRONG response (NEVER DO THIS):**
