@@ -155,6 +155,10 @@ The agent provides query and search functionality to retrieve factual informatio
 - Context surrounding matched content
 - Links to full document sources
 - **Section identification:** Specify which section/category contains the information
+- **Embedded links:** Include any hyperlinks found within the content
+  - Extract link text and URL
+  - Preserve link context (what the link is about)
+  - Format: "Link text" -> URL
 
 **Result Presentation:**
 - All results must be factual extracts from the website
@@ -164,6 +168,10 @@ The agent provides query and search functionality to retrieve factual informatio
   - Example: "Found in Balance Improvement Program (BIP)"
   - Example: "Found in Cloud Service Providers > Authorization Package"
   - Example: "Found in Agencies > Sponsorship"
+- **Embedded links:** If the retrieved content contains hyperlinks, include them
+  - Show the link text as it appears in the original
+  - Provide the full URL the link points to
+  - Make it clear these are links from the source document
 - Timestamps showing when data was retrieved
 - "No results found" when queries return nothing
 
@@ -173,6 +181,18 @@ Section: [Section Name]
 Document: [Document Title]
 URL: [Full URL]
 Retrieved: [Timestamp]
+```
+
+**Embedded Links Format:**
+When content includes hyperlinks, present them as:
+```
+Content excerpt: "For more information, see the Authorization Process guide"
+Embedded link: "Authorization Process guide" -> https://www.fedramp.gov/playbook/csp/authorization/
+```
+
+Or inline:
+```
+"For more information, see the [Authorization Process guide](https://www.fedramp.gov/playbook/csp/authorization/)"
 ```
 
 **Query Constraints (Agent Requirements):**
