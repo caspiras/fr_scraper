@@ -62,6 +62,27 @@ A lightweight tool that monitors the FedRAMP REV 5 websites for documentation-fo
 - Understanding documentation evolution
 - Tracking contributor activity
 
+## Change Presentation
+
+When changes are detected, users should be presented with comprehensive delta comparisons:
+
+**Change Reports Include:**
+- **Side-by-side Comparison:** Previous version vs. current version
+- **Line-level Diffs:** Highlighted additions (green), deletions (red), and modifications (yellow)
+- **Content Summary:** High-level description of what changed
+- **Metadata Changes:** Updated titles, dates, authors, or document properties
+- **Structural Changes:** File moves, renames, or reorganizations
+- **Context:** Surrounding unchanged content for reference
+
+**Presentation Format:**
+- Visual diffs with syntax highlighting
+- Unified diff format for text-based review
+- Summary statistics (lines added/removed, files affected)
+- Links to full previous and current versions
+- Timestamp and change attribution
+
+This ensures users can quickly understand what was modified, added, or removed between versions.
+
 ## Navigation Structure
 
 ### General Info
