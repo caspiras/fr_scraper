@@ -6,6 +6,48 @@
 
 ---
 
+## ⚠️ READ THIS FIRST - CHANGE DETECTION REQUIREMENTS
+
+**WORKFLOW CLARIFICATION:**
+- You do NOT monitor in the background continuously
+- You DO NOT need a scheduled script or external monitoring
+- **TRIGGER: When user asks about changes to the website in ANY variation**
+  - "What has changed?"
+  - "What has changed on the website?"
+  - "Have there been any changes?"
+  - "Any updates to the site?"
+  - "Has anything changed?"
+  - "What's new?"
+  - "Any changes to the FedRAMP docs?"
+  - **ANY question asking about changes/updates to the website**
+- **ACTION: Immediately crawl all pages and compare to last stored snapshots**
+
+**When user asks about changes (in ANY variation) you MUST NOT:**
+- ❌ Say you can't detect changes automatically
+- ❌ Say you need the user to provide a baseline
+- ❌ Suggest setting up external monitoring
+- ❌ Check only the changelog page
+- ❌ Say "changelog shows no new entries"
+- ❌ Rely on any single page to tell you what changed
+
+**When user asks about changes (in ANY variation) you MUST:**
+- ✅ Recognize ANY variation asking about changes as YOUR TRIGGER
+- ✅ Start checking NOW - immediately upon seeing the question
+- ✅ Crawl ALL 40-50+ individual pages under /docs/rev5/
+- ✅ Compare each page's current content to stored snapshots from last check
+- ✅ The stored snapshots ARE the baseline (in project directory)
+- ✅ Report which specific pages changed and what changed in each
+- ✅ YES, you WILL tell the user about per-page changes when they ask
+
+**Trigger variations include:**
+- Questions about "changes", "updates", "what's new", "modifications"
+- Referencing "the website", "the site", "FedRAMP docs", "Rev5 docs"
+- Past or present tense: "changed", "has changed", "did anything change"
+
+**This is comprehensive page-by-page comparison, not a changelog lookup.**
+
+---
+
 ## AGENT INSTRUCTIONS
 
 **If you are an agent reading this specification:**
@@ -16,8 +58,115 @@ This file contains the **guidelines** for how you should operate when monitoring
 - Read this spec to understand your capabilities and constraints
 - Use the patterns, selectors, and strategies defined here as your operational framework
 
+---
+
+## 🚨 CRITICAL: CHANGE DETECTION IS NOT A CHANGELOG LOOKUP
+
+**TRIGGER-BASED WORKFLOW:**
+- User asking about changes (ANY variation) = Your trigger to check NOW
+- Examples: "What changed?", "Any updates?", "What's new on the website?", "Has anything changed?"
+- You fetch all pages at that moment and compare to stored snapshots
+- You DO NOT need background monitoring or scheduled scripts
+- You DO NOT need user to provide a baseline (snapshots are stored in project)
+- You WILL detect and report per-page changes when user asks
+
+**When user asks "What has changed?" you MUST:**
+1. Recognize this as your TRIGGER to start checking
+2. Crawl ALL 40-50+ pages individually under https://www.fedramp.gov/docs/rev5/
+3. Fetch current content from EVERY page (not just one changelog page)
+4. Load stored snapshots from last check (or note this is first check)
+5. Compare each page's content vs. stored snapshots **from the last time you checked**
+6. Report which pages changed since the last check and what changed in each
+7. Store new snapshots with timestamp for next comparison
+
+**TEMPORAL TRACKING:**
+- **First time user asks:** Establish baseline by crawling all pages, store snapshots, report "First check - baseline established"
+- **Subsequent times:** Compare current state vs. snapshots from last time you checked
+- **Report format:** "Changes since last check on [date/time]"
+- **You ARE capable of detecting per-page changes** - that's the whole purpose
+
+**🚫 ABSOLUTELY FORBIDDEN - RESPONSES TO AVOID:**
+- ❌ **DO NOT** fetch the changelog page and report what it says
+- ❌ **DO NOT** rely on the changelog to tell you what changed
+- ❌ **DO NOT** say "changelog shows no changes" or "no new changelog entries"
+- ❌ **DO NOT** make excuses like "minor edits may happen without changelog updates"
+- ❌ **DO NOT** say "I can't detect changes automatically"
+- ❌ **DO NOT** say "I don't watch the site in the background"
+- ❌ **DO NOT** say "I won't know until you ask me to check"
+- ❌ **DO NOT** suggest external monitoring or scheduled scripts as an alternative
+- ✅ **YOU** are responsible for detecting ALL changes by comparing page content
+- ✅ **YOU** must crawl every page and diff the content yourself when user asks
+- ✅ **YOU** WILL detect per-page changes when triggered by user asking
+- ✅ The changelog is irrelevant - you detect changes by direct comparison
+- ✅ User asking "What changed?" IS them asking you to check
+
+**Example of WRONG behavior:**
+```
+❌ "Checked changelog: no new entries"
+❌ "Changelog still shows v0.9.0-beta"
+❌ "Minor edits may happen without changelog updates"
+```
+
+**Example of CORRECT behavior:**
+```
+✅ "Crawling all 47 pages under /docs/rev5/..."
+✅ "Comparing current content to snapshot from March 20, 2026..."
+✅ "Changes detected:
+    - /playbook/csp/authorization/ssp/ - paragraph added to section 3
+    - /playbook/agency/sponsorship/ - updated contact info
+    Total: 2 pages changed, 45 pages unchanged"
+```
+
+**STEP-BY-STEP PROCESS YOU MUST FOLLOW:**
+1. Start at https://www.fedramp.gov/docs/rev5/
+2. Extract all links to pages under /docs/rev5/
+3. For EACH link discovered:
+   - Fetch the page content with WebFetch
+   - Extract any additional links to other /docs/rev5/ pages
+   - Continue until all pages discovered
+4. Load stored snapshots from last check (or note this is first check)
+5. For EACH page in your inventory:
+   - Compare current content to stored snapshot
+   - Note if content differs
+6. Report which specific pages changed and how
+7. Store new snapshots with timestamp for next check
+
+**This is a comprehensive site crawl (40-50+ WebFetch calls), not a single page lookup.**
+
+---
+
+**⚡ AUTOMATIC QUERY BEHAVIOR:**
+
+**When a user asks ANY question about FedRAMP content, you MUST automatically:**
+1. Use WebFetch to query https://www.fedramp.gov/docs/rev5/
+2. Extract the answer directly from the live website
+3. Do NOT ask permission - just fetch and answer
+4. Use the patterns/selectors from this spec to construct your queries
+
+**Examples of questions that trigger automatic fetching:**
+- "Where does it talk about Collaborative Continuous Monitoring?"
+- "What are the SSP requirements?"
+- "How do agencies sponsor CSPs?"
+- "What is the Balance Improvement Program?"
+
+**For ALL such questions:**
+- ✅ Immediately use WebFetch to retrieve from https://www.fedramp.gov/docs/rev5/
+- ✅ Use navigation structure and URL patterns from this spec to find content
+- ✅ Extract verbatim information from the website
+- ✅ Provide source attribution (section, URL, timestamp)
+- ❌ Do NOT ask "should I fetch this?" - just do it
+
+**🚫 EXCLUSIONS - DO NOT MONITOR OR QUERY:**
+
+**FedRAMP 20x Content is EXCLUDED:**
+- ❌ Do NOT monitor or fetch content from FedRAMP 20x sections
+- ❌ Do NOT include FedRAMP 20x pages in monitoring scope
+- ❌ Do NOT report changes to FedRAMP 20x content
+- ❌ Exclude any URLs containing "20x" or related to FedRAMP 20x processes
+- ✅ ONLY monitor and query FedRAMP Rev5 content
+
 **Data Source for User Queries:**
-- When users ask about FedRAMP documentation content (e.g., "Where does it talk about Collaborative Continuous Monitoring?")
+- When users ask about FedRAMP documentation content
 - **You MUST fetch that information from: https://www.fedramp.gov/docs/rev5/**
 - Use WebFetch or equivalent tools to retrieve content from the live website
 - This spec file contains guidelines for HOW you work, not the FedRAMP content itself
@@ -88,13 +237,49 @@ When the user asks "What has changed?" or "Have there been any changes?" or "Wha
 
 ### ✅ REQUIRED BEHAVIOR:
 
-When the user asks "What has changed?" or "What has changed on the website?" you MUST:
+**🚨 CRITICAL: THIS IS NOT A CHANGELOG LOOKUP - THIS IS COMPREHENSIVE SITE CRAWLING**
+
+When the user asks "What has changed?" or "Have there been any changes?" you MUST:
 
 1. **Understand "the website" = https://www.fedramp.gov/docs/rev5/ and ALL associated pages**
-2. **Use WebFetch** to retrieve current content from the FedRAMP website (base + all subpages)
-3. **Compare** current FedRAMP website content to stored website snapshot from last check
-4. **Report ONLY** changes to the FedRAMP website content (pages added/modified/deleted)
+2. **Fetch current state of ALL monitored pages:**
+   - Use WebFetch to retrieve current content from EVERY page under /docs/rev5/
+   - Crawl ALL pages (playbooks, guides, all subpages at any depth)
+   - **❌ DO NOT just fetch a "changelog" page or "what's new" page**
+   - **❌ DO NOT assume there's a single page that lists all changes**
+   - **✅ DO crawl the ENTIRE website and check EVERY page's actual content**
+   - This means fetching 40-50+ pages individually to check each one
+3. **Compare against snapshot from the LAST TIME you checked:**
+   - Load the stored snapshot from the last time you crawled the website
+   - If this is the first check, there's no previous snapshot - establish baseline and store it
+   - Compare page-by-page: current content vs. stored content from last check
+   - Detect: new pages, modified pages, deleted pages, content changes on any page
+   - **This is a temporal content diff operation (now vs. last check), not reading a changelog**
+4. **Report ALL detected changes since the last time you checked:**
+   - If first check: "First check - baseline established. No previous snapshot to compare."
+   - If subsequent check: "Changes since last check on [date/time from last snapshot]:"
+   - List every page that changed (content modifications) since last check
+   - List every new page added since last check
+   - List every page removed since last check
+   - Provide specific details about what changed in each affected page
+   - Store new snapshot with current timestamp for next comparison
 5. **Never check** this git repository, spec.md, or any local files
+
+**⚠️ WRONG APPROACH (DO NOT DO THIS):**
+```
+❌ Fetch https://www.fedramp.gov/docs/rev5/changelog/
+❌ Look for a "What's New" page
+❌ Check only one page for change information
+```
+
+**✅ CORRECT APPROACH (DO THIS):**
+```
+✅ Crawl starting from https://www.fedramp.gov/docs/rev5/
+✅ Follow ALL links to discover all pages under /docs/rev5/
+✅ Fetch content from EACH discovered page (40-50+ pages)
+✅ Compare each page's current content vs. stored snapshot
+✅ Report which specific pages changed and what changed in each
+```
 
 **Example correct response:**
 ```
@@ -159,48 +344,111 @@ The **FedRAMP Rev5 Documentation Monitor** is a monitoring specification designe
 - DO NOT show commit history or git information
 
 **✅ REQUIRED ACTIONS WHEN USER ASKS ABOUT CHANGES:**
-- Use WebFetch to query https://www.fedramp.gov/docs/rev5/
-- Compare current website to stored website snapshot
-- Report ONLY FedRAMP website changes
+- Use WebFetch to crawl ALL pages under https://www.fedramp.gov/docs/rev5/
+- Compare current state of ALL pages to stored snapshots from last check
+- Report ONLY FedRAMP website changes (actual page content changes)
+- **❌ DO NOT just check a changelog page - crawl every single page**
+- **✅ DO perform comprehensive page-by-page comparison across entire site**
 
 When a user asks "Have there been any changes?" or "What's new?", the agent must:
 
-1. **Fetch Current Website State:** Use WebFetch to retrieve current content from https://www.fedramp.gov/docs/rev5/
-2. **Retrieve Last Snapshot:** Load the stored snapshot of the website from the last time the user asked
-3. **Compare Website States:** Compare the current website content to the stored website snapshot
-4. **Report Website Changes Only:** Show only what changed on the FedRAMP website since last check
-5. **First-Time Check:** If this is the first check, state: "This is the first check of the FedRAMP website. Establishing baseline." then fetch and store current state
+1. **Fetch Current State of ALL Pages:**
+   - Use WebFetch to retrieve current content from EVERY page under https://www.fedramp.gov/docs/rev5/
+   - Crawl recursively through all playbooks, guides, and subpages
+   - This is NOT just checking a "changelog" - you're checking EVERY page's actual content
+2. **Retrieve Last Snapshot:** Load the stored snapshot of ALL pages from the last time the user asked
+3. **Compare Page-by-Page:** Compare current content vs. stored content for EVERY monitored page
+4. **Report ALL Changes Detected:**
+   - Show what changed on EACH page that was modified
+   - List new pages that were added
+   - List pages that were removed
+   - Provide details about content modifications on each affected page
+5. **First-Time Check:** If this is the first check, state: "This is the first check of the FedRAMP website. Establishing baseline by crawling all pages." then fetch and store current state
 6. **Time Reference:** Always include the timeframe in change reports
    - Example: "Changes to the FedRAMP website since last check on [timestamp]"
-   - Example: "No changes to the FedRAMP website since [timestamp]"
+   - Example: "No changes detected across all monitored pages since [timestamp]"
 
 **Storage Requirements:**
 - Persist last check timestamp across sessions
 - **Store snapshot of WEBSITE CONTENT at each check** (fetched from https://www.fedramp.gov/docs/rev5/)
+- Store snapshots in the project directory (frdocs-project)
 - Track per-user or per-session to avoid mixing different users' check histories
+
+**IMPORTANT CLARIFICATION:**
+- You do NOT monitor in the background between user questions
+- You DO check for changes when user asks "What has changed?"
+- User asking = your trigger to fetch all pages and compare to stored snapshots
+- The stored snapshots ARE the baseline you compare against
+- You WILL detect and report per-page changes when triggered by user question
 
 **Example Interaction:**
 ```
 User: "Have there been any changes?"
-Agent:
+
+Agent Actions (CORRECT):
 - Retrieves last check timestamp: 2026-03-20 14:30:00
-- Retrieves stored website snapshot from 2026-03-20
-- Fetches current website state from https://www.fedramp.gov/docs/rev5/
-- Compares current website vs. stored website snapshot
-- Reports: "Changes to the FedRAMP website since last check on March 20, 2026 at 2:30 PM:
-  - Playbook 'Authorization Process' was updated
-  - New document 'Security Assessment Guide' was added
-  - Balance Improvement Program section was modified"
+- Retrieves stored snapshots of all 47 pages from last check
+- Crawls current state starting from /docs/rev5/
+- Makes 47+ WebFetch calls to fetch current content from EVERY page
+- Compares page-by-page: current vs. stored snapshots
+- Detects changes on 3 pages
+
+Agent Reports (CORRECT):
+"Crawling all pages under /docs/rev5/ to check for changes...
+
+Changes to the FedRAMP website since last check on March 20, 2026 at 2:30 PM:
+
+Modified Pages (3):
+1. /playbook/csp/authorization/getting-started/
+   - Added new paragraph in 'Prerequisites' section
+   - Modified text in 'Timeline' section
+
+2. /playbook/agency/sponsorship/
+   - Updated contact information
+   - Changed sponsorship process step 3 description
+
+3. /balance-improvement/
+   - Added new requirement to mandatory enhancements
+   - Updated effective date
+
+New Pages: None
+Removed Pages: None
+Total pages monitored: 47
+Total changes detected: 3 pages modified"
+
+---
+
+Agent Actions (WRONG - DO NOT DO THIS):
+- Fetches only the changelog page
+- Reads what the changelog says
+
+Agent Reports (WRONG - DO NOT DO THIS):
+"Checked FedRAMP's documentation changelog: it still lists only v0.9.0-beta.
+Minor edits may still happen on individual doc pages."
 ```
 
 **What to Monitor for Changes:**
-- **All pages** under /docs/rev5/ (see "Monitoring Targets" section for complete scope)
-- Document content (text, sections, headings) on every page
-- New or removed pages/documents at any depth
-- Updated PDFs or templates
-- Navigation structure modifications
-- Metadata changes (titles, dates)
-- Changes at any level of the site hierarchy
+- **🔄 COMPREHENSIVE PAGE-BY-PAGE COMPARISON:**
+  - Compare ALL pages under /docs/rev5/ (not just a changelog)
+  - Check EVERY playbook, guide, and documentation page for content changes
+  - Monitor actual page content (paragraphs, sections, headings) on each page
+  - Detect when ANY page's content is modified
+- **New or removed pages/documents at any depth**
+- **Updated PDFs or templates**
+- **Navigation structure modifications**
+- **Metadata changes (titles, dates)**
+- **Changes at any level of the site hierarchy**
+
+**🚨 THIS IS NOT A CHANGELOG LOOKUP - READ THIS CAREFULLY:**
+- ❌ **WRONG:** Fetch https://www.fedramp.gov/docs/rev5/changelog/ and read what changed
+- ❌ **WRONG:** Look for a single "changelog" or "what's new" page
+- ❌ **WRONG:** Assume the website has a page that lists all changes
+- ✅ **CORRECT:** Crawl ALL 40-50+ pages under /docs/rev5/ individually
+- ✅ **CORRECT:** Fetch current content from EVERY single page
+- ✅ **CORRECT:** Compare each page's content against stored snapshot from last check
+- ✅ **CORRECT:** Detect changes by doing page-by-page content diffing
+
+**This means you will make 40-50+ WebFetch calls to check every page, not just 1 call to a changelog.**
 
 **What NOT to Monitor or Report:**
 - ❌ This specification file (spec.md)
@@ -276,6 +524,8 @@ The agent must monitor ALL pages within the /docs/rev5/ path, including:
 - External links (outside fedramp.gov domain)
 - Links outside /docs/rev5/ path
 - Static assets (images, CSS, JS) - unless specifically relevant to content
+- **FedRAMP 20x content** - any pages related to FedRAMP 20x processes or materials
+- Any URLs containing "20x" or referencing FedRAMP 20x documentation
 
 ### Monitoring Workflow
 
@@ -290,18 +540,24 @@ The agent must monitor ALL pages within the /docs/rev5/ path, including:
    - Save snapshot of each page's content
 
 2. **Subsequent Checks (When User Asks About Changes):**
-   - Retrieve stored page inventory from last check
-   - Re-crawl starting from https://www.fedramp.gov/docs/rev5/
-   - Discover current page inventory
+   - **DO NOT check the changelog page and report what it says**
+   - **DO crawl all individual documentation pages:**
+     - Retrieve stored page inventory from last check
+     - Re-crawl starting from https://www.fedramp.gov/docs/rev5/
+     - Discover current page inventory
    - **Compare inventories:**
      - Identify new pages (in current, not in stored)
      - Identify removed pages (in stored, not in current)
      - Identify existing pages to check for content changes
    - **For each existing page:**
-     - Fetch current content
-     - Compare to stored snapshot
+     - Fetch current content with WebFetch
+     - Compare to stored snapshot from last check
      - Record any differences
-   - Report all changes found across all pages
+   - **Report all changes found:**
+     - List specific pages that changed
+     - Show what changed in each page
+     - Total: X pages changed, Y unchanged
+     - NOT just "changelog shows nothing new"
 
 3. **Example of Comprehensive Detection:**
    ```
@@ -479,11 +735,13 @@ This ensures users receive accurate, verifiable information directly from the Fe
 - Related Guidance
 
 ### FedRAMP 20x
-- Foundation Materials
-- Processes
-- Archived Phase 1 Content
+**⚠️ EXCLUDED FROM MONITORING - DO NOT QUERY**
+- Foundation Materials (excluded)
+- Processes (excluded)
+- Archived Phase 1 Content (excluded)
 
 ### FedRAMP Rev5
+**✅ PRIMARY MONITORING SCOPE**
 - Cloud Service Providers Playbooks
 - Agencies Playbooks
 - Balance Improvement Releases
