@@ -1,7 +1,11 @@
 # FedRAMP Rev5 Documentation Monitoring Specification
 
-**Target:** https://www.fedramp.gov/docs/rev5/
+**Targets:**
+1. https://www.fedramp.gov/docs/rev5/ (Rev5 Documentation - 40-50+ pages)
+2. https://www.fedramp.gov/notices/ (Public Notices - single page)
+
 **Created:** 2026-03-23
+**Updated:** 2026-04-01 (added notices page)
 **Version:** Rev5
 
 ---
@@ -34,9 +38,10 @@
 - ✅ Recognize ANY variation asking about changes as YOUR TRIGGER
 - ✅ Start checking NOW - immediately upon seeing the question
 - ✅ Crawl ALL 40-50+ individual pages under /docs/rev5/
-- ✅ Compare each page's current content to stored snapshots from last check
+- ✅ Fetch the notices page at /notices/
+- ✅ Compare each page's current content to stored snapshots from last check (BOTH sites)
 - ✅ The stored snapshots ARE the baseline (in project directory)
-- ✅ Report which specific pages changed and what changed in each
+- ✅ Report which specific pages/notices changed and what changed in each
 - ✅ YES, you WILL tell the user about per-page changes when they ask
 
 **Trigger variations include:**
@@ -71,19 +76,25 @@ This file contains the **guidelines** for how you should operate when monitoring
 - You WILL detect and report per-page changes when user asks
 
 **When user asks "What has changed?" you MUST:**
-1. Recognize this as your TRIGGER to start checking
+1. Recognize this as your TRIGGER to start checking BOTH sites
 2. Crawl ALL 40-50+ pages individually under https://www.fedramp.gov/docs/rev5/
-3. Fetch current content from EVERY page (not just one changelog page)
-4. Load stored snapshots from last check (or note this is first check)
-5. Compare each page's content vs. stored snapshots **from the last time you checked**
-6. Report which pages changed since the last check and what changed in each
-7. Store new snapshots with timestamp for next comparison
+3. Fetch the notices page at https://www.fedramp.gov/notices/
+4. Fetch current content from EVERY Rev5 doc page (not just one changelog page)
+5. Load stored snapshots from **the most recent snapshot only** (see "SNAPSHOT BASELINE (DEFAULT)" above), or note this is first check
+6. Compare each page's content vs. that baseline (**not** older snapshot directories unless the user asked for a specific date/baseline)
+7. Report which pages/notices changed since the last check and what changed in each
+8. Store new snapshots with timestamp for next comparison (both sites)
 
 **TEMPORAL TRACKING:**
 - **First time user asks:** Establish baseline by crawling all pages, store snapshots, report "First check - baseline established"
 - **Subsequent times:** Compare current state vs. snapshots from last time you checked
 - **Report format:** "Changes since last check on [date/time]"
 - **You ARE capable of detecting per-page changes** - that's the whole purpose
+
+**SNAPSHOT BASELINE (DEFAULT — READ THIS):**
+- For change checks, status questions, and routine comparisons, use **only the most recent stored snapshot** as the baseline (e.g. follow `snapshots/latest.json` → `baseline_directory`, or if that file is missing, use the **newest** timestamped directory under `snapshots/` by name/time).
+- **Do not** pull in older snapshot folders (e.g. prior baselines, historical dated runs) for those answers unless the user explicitly asks.
+- **Exception:** When the user asks for a **specific date**, time range, named run, or comparison to an older baseline, load and use that snapshot (or compare as requested).
 
 **🚫 ABSOLUTELY FORBIDDEN - RESPONSES TO AVOID:**
 - ❌ **DO NOT** fetch the changelog page and report what it says
@@ -249,8 +260,8 @@ When the user asks "What has changed?" or "Have there been any changes?" you MUS
    - **❌ DO NOT assume there's a single page that lists all changes**
    - **✅ DO crawl the ENTIRE website and check EVERY page's actual content**
    - This means fetching 40-50+ pages individually to check each one
-3. **Compare against snapshot from the LAST TIME you checked:**
-   - Load the stored snapshot from the last time you crawled the website
+3. **Compare against the most recent stored snapshot only:**
+   - Load the baseline from the **single newest** snapshot (per `snapshots/latest.json` or newest dated folder); do not merge or summarize across older snapshot runs unless the user requests a specific date or historical comparison
    - If this is the first check, there's no previous snapshot - establish baseline and store it
    - Compare page-by-page: current content vs. stored content from last check
    - Detect: new pages, modified pages, deleted pages, content changes on any page
@@ -356,7 +367,7 @@ When a user asks "Have there been any changes?" or "What's new?", the agent must
    - Use WebFetch to retrieve current content from EVERY page under https://www.fedramp.gov/docs/rev5/
    - Crawl recursively through all playbooks, guides, and subpages
    - This is NOT just checking a "changelog" - you're checking EVERY page's actual content
-2. **Retrieve Last Snapshot:** Load the stored snapshot of ALL pages from the last time the user asked
+2. **Retrieve baseline snapshot:** Load ALL pages from the **most recent** stored snapshot only (unless the user specified a date or older baseline)
 3. **Compare Page-by-Page:** Compare current content vs. stored content for EVERY monitored page
 4. **Report ALL Changes Detected:**
    - Show what changed on EACH page that was modified
@@ -824,6 +835,56 @@ Optional and mandatory enhancements bringing modern requirements from FedRAMP 20
 ### Filters
 - **Available:** No
 - **Description:** No explicit filter functionality observed
+
+---
+
+## FedRAMP Public Notices Page
+
+**URL:** https://www.fedramp.gov/notices/
+
+**Added:** 2026-04-01
+
+**Type:** Single-page notice board with chronological entries
+
+### Structure
+The notices page contains:
+- **Notice ID**: Sequential number (e.g., 0009, 0008, 0007...)
+- **Notice Title**: Brief title describing the notice
+- **Description**: Summary of the notice content
+- **Publication Date**: When the notice was published (YYYY-MM-DD format)
+- **RSS Feed**: Available at https://www.fedramp.gov/notices/rss.xml
+
+### Content Types
+Notices include:
+- **Emergency Directives**: Critical security alerts requiring immediate action
+- **RFC Outcomes**: Results of Requests for Comments with community feedback
+- **Program Announcements**: Updates to FedRAMP program policies and procedures
+- **Test Notifications**: Planned system or security testing schedules
+- **General Updates**: Other program-related communications
+
+### Change Detection
+**When checking for changes:**
+1. Fetch current notices page content
+2. Extract all notice entries (ID, title, description, date)
+3. Compare to stored snapshot
+4. Report:
+   - **New notices**: Entries not in previous snapshot
+   - **Modified notices**: Changes to title or description
+   - **Removed notices**: Entries no longer present
+   - **Date changes**: Updates to publication dates
+
+**Notice tracking priority:**
+- High priority: Emergency directives (immediate action required)
+- Medium priority: RFC outcomes (affects compliance requirements)
+- Standard priority: Program announcements and general updates
+
+### Query Strategies
+- **Get all current notices**: Fetch /notices/ and list all entries
+- **Check for new notices**: Compare current to last snapshot
+- **Get specific notice**: Search by ID, title, or date
+- **Get emergency directives**: Filter by notice type
+
+---
 
 ## Query Strategies
 
