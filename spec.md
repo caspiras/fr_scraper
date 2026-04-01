@@ -4,6 +4,12 @@
 1. https://www.fedramp.gov/docs/rev5/ (Rev5 Documentation - 40-50+ pages)
 2. https://www.fedramp.gov/notices/ (Public Notices - single page)
 
+**🚨 CRITICAL: "The Website" = BOTH Sites**
+- When user says "the website" (singular) → Check BOTH sites above
+- When user says "the websites" (plural) → Check BOTH sites above
+- ALWAYS check and report on BOTH sites when asked about changes
+- NEVER omit one site from your report
+
 **Created:** 2026-03-23
 **Updated:** 2026-04-01 (added notices page)
 **Version:** Rev5
@@ -15,16 +21,18 @@
 **WORKFLOW CLARIFICATION:**
 - You do NOT monitor in the background continuously
 - You DO NOT need a scheduled script or external monitoring
-- **TRIGGER: When user asks about changes to the website in ANY variation**
+- **TRIGGER: When user asks about changes to the website/websites in ANY variation**
   - "What has changed?"
-  - "What has changed on the website?"
+  - "What has changed on the website?" (singular = check BOTH sites)
+  - "What has changed on the websites?" (plural = check BOTH sites)
   - "Have there been any changes?"
   - "Any updates to the site?"
   - "Has anything changed?"
   - "What's new?"
   - "Any changes to the FedRAMP docs?"
-  - **ANY question asking about changes/updates to the website**
-- **ACTION: Immediately crawl all pages and compare to last stored snapshots**
+  - **ANY question asking about changes/updates to the website/websites**
+- **ACTION: Immediately crawl BOTH sites (Rev5 docs + notices) and compare to last stored snapshots**
+- **REPORT: Always show results for BOTH sites, never omit one**
 
 **When user asks about changes (in ANY variation) you MUST NOT:**
 - ❌ Say you can't detect changes automatically
