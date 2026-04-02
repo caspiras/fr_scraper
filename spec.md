@@ -73,6 +73,380 @@ This file contains the **guidelines** for how you should operate when monitoring
 
 ---
 
+## 📸 SNAPSHOT CREATION PROCESS - MANDATORY STEPS
+
+**🚨 CRITICAL: Every snapshot MUST include ALL content files + metadata. A snapshot with only `_meta.json` is INCOMPLETE and INVALID.**
+
+### When to Create Snapshots
+
+**🚨 TRIGGER-BASED ONLY - NO AUTOMATION**
+
+Snapshots are created ONLY when the user asks trigger words:
+
+1. **User asks about changes** (any variation: "what changed?", "any updates?", "what's new?", "have there been any changes?", "check for changes")
+2. **First time user asks** about changes in this project (establish baseline)
+
+**NOT triggered by:**
+- ❌ Scheduled/automated checks (no cron jobs)
+- ❌ Background monitoring
+- ❌ Time-based intervals
+
+**Workflow:**
+1. User asks trigger words → Create new snapshot NOW
+2. Compare new snapshot to most recent previous snapshot
+3. Report changes detected
+
+### Snapshot Directory Structure
+
+**Naming Convention:**
+```
+snapshots/YYYY-MM-DDTHHMMSSZ-{label}/
+```
+
+**Labels:**
+- `first-baseline` - first snapshot ever taken
+- `update` - all subsequent snapshots
+
+**Examples:**
+- `2026-03-30T120000Z-first-baseline`
+- `2026-04-02T170000Z-update`
+
+### Step 1: Create Snapshot Directory
+
+```bash
+# Get current UTC timestamp
+TIMESTAMP=$(date -u +"%Y-%m-%dT%H%M%SZ")
+LABEL="update"  # or "first-baseline" for first run
+SNAPSHOT_DIR="snapshots/${TIMESTAMP}-${LABEL}"
+mkdir -p "$SNAPSHOT_DIR"
+```
+
+### Step 2: Crawl Rev5 Documentation (36+ pages)
+
+**Start URL:** https://www.fedramp.gov/docs/rev5/
+
+**Crawling Process:**
+
+1. **Fetch the main index page**
+   ```
+   WebFetch: https://www.fedramp.gov/docs/rev5/
+   ```
+
+2. **Extract all navigation links** under `/docs/rev5/` (exclude `/docs/20x/`)
+   - Look for links in: nav, main content, sidebars
+   - Filter to only `/docs/rev5/*` paths
+   - Build a complete URL inventory
+
+3. **For EACH discovered page:**
+   - Fetch the full HTML with WebFetch
+   - Extract main content using selectors: `main`, `article`, `.content`
+   - Create a markdown summary (see format below)
+   - Save to `{snapshot_dir}/{sanitized_url}.html`
+
+**Expected Page Count:** ~36-40 pages
+
+**Example URLs to capture:**
+```
+https://www.fedramp.gov/docs/rev5/
+https://www.fedramp.gov/docs/rev5/balance/
+https://www.fedramp.gov/docs/rev5/balance/authorization-data-sharing/
+https://www.fedramp.gov/docs/rev5/playbook/csp/authorization/ssp/
+https://www.fedramp.gov/docs/rev5/playbook/agency/authorization/
+... (all pages under /docs/rev5/)
+```
+
+### Step 3: Extract and Save Page Content
+
+**For each page, create a markdown summary file:**
+
+**Content to Extract:**
+1. Primary heading (H1 or page title)
+2. First paragraph or overview section
+3. Major section headings (H2, H3)
+4. Key bullet points or numbered lists
+5. Important links or references
+6. Any tables with critical data
+
+**Markdown Format:**
+```markdown
+# [Page Title]
+
+## Overview
+[First paragraph describing the page purpose]
+
+## [Major Section 1]
+- Key point 1
+- Key point 2
+
+## [Major Section 2]
+[Important content summary]
+
+## Links and References
+- [Link text](URL)
+```
+
+**File Naming - URL Sanitization:**
+
+Convert URL to filename:
+```
+https://www.fedramp.gov/docs/rev5/
+→ root.html
+
+https://www.fedramp.gov/docs/rev5/balance/
+→ root__balance.html
+
+https://www.fedramp.gov/docs/rev5/playbook/csp/authorization/ssp/
+→ root__playbook__csp__authorization__ssp.html
+```
+
+**Rules:**
+- Remove `https://www.fedramp.gov/docs/rev5/`
+- Replace `/` with `__`
+- Use `root` for the main index
+- Remove leading/trailing slashes
+- Keep all path segments
+
+### Step 4: Fetch Public Notices
+
+**URL:** https://www.fedramp.gov/notices/
+
+**Process:**
+
+1. Fetch the notices page HTML
+2. Extract all notice entries
+3. For each notice, capture:
+   - Notice ID (format: 0001, 0002, etc.)
+   - Title/subject
+   - Date published (YYYY-MM-DD format)
+
+**Expected Output:**
+```json
+[
+  {
+    "id": "0009",
+    "title": "Initial Outcome from RFC-0024 Rev5 Machine-Readable Packages",
+    "date": "2026-03-25"
+  },
+  {
+    "id": "0008",
+    "title": "Initial Outcome from RFC-0023 Rev5 Program Certifications",
+    "date": "2026-03-06"
+  }
+]
+```
+
+### Step 5: Create Metadata File
+
+**File:** `{snapshot_dir}/_meta.json`
+
+**Required Fields:**
+```json
+{
+  "checked_at": "2026-04-02T17:00:00Z",
+  "label": "update",
+  "page_count": 36,
+  "notices_count": 9,
+  "notices_latest_id": "0009",
+  "notices_latest_date": "2026-03-25",
+  "compared_to": "2026-04-01T170000Z-update",
+  "changes_detected": true,
+  "notes": "Description of what changed or 'No changes detected'",
+  "urls": [
+    "https://www.fedramp.gov/docs/rev5/",
+    "... all 36+ crawled URLs ..."
+  ],
+  "notices_snapshot": [
+    {"id": "0009", "title": "...", "date": "2026-03-25"},
+    "... all notices ..."
+  ]
+}
+```
+
+**Field Descriptions:**
+- `checked_at`: ISO 8601 timestamp (UTC) when snapshot was taken
+- `label`: "first-baseline" or "update"
+- `page_count`: Total Rev5 doc pages captured
+- `notices_count`: Total number of notices found
+- `notices_latest_id`: Most recent notice ID
+- `notices_latest_date`: Date of most recent notice
+- `compared_to`: Previous snapshot directory name (null for first run)
+- `changes_detected`: true/false based on comparison
+- `notes`: Human-readable summary
+- `urls`: Complete array of all crawled Rev5 URLs
+- `notices_snapshot`: Complete array of all notices with metadata
+
+### Step 6: Update Latest Pointer
+
+**File:** `snapshots/latest.json`
+
+```json
+{
+  "baseline_directory": "2026-04-02T170000Z-update",
+  "checked_at": "2026-04-02T17:00:00Z",
+  "page_count": 36,
+  "notices_count": 9,
+  "scope": "https://www.fedramp.gov/docs/rev5/ (excluding /docs/20x/) + https://www.fedramp.gov/notices/",
+  "notes": "Summary of latest check results"
+}
+```
+
+### Step 7: Verify Snapshot Completeness
+
+**A valid snapshot MUST contain:**
+
+✅ `_meta.json` file
+✅ 36+ `.html` files (one per Rev5 doc page)
+✅ All fields populated in `_meta.json`
+✅ `notices_snapshot` array with all current notices
+✅ `urls` array matching the count in `page_count`
+
+**Invalid snapshot (DO NOT CREATE):**
+❌ Only `_meta.json` without content files
+❌ Missing `_meta.json`
+❌ Partial page coverage (e.g., only 10 pages when 36 exist)
+❌ Empty or null critical fields in metadata
+
+### Step 8: Compare to Previous Snapshot (If Exists)
+
+**Load Previous Snapshot:**
+1. Read `snapshots/latest.json` → get `baseline_directory`
+2. Load `{previous_dir}/_meta.json`
+3. Load previous `.html` files
+
+**Compare:**
+- **Page count changes:** Current vs previous `page_count`
+- **New URLs:** URLs in current not in previous `urls` array
+- **Removed URLs:** URLs in previous not in current
+- **Notice changes:** New notices (compare `notices_latest_id`)
+- **Content changes:** For each .html file, compare text content
+
+**Update `_meta.json`:**
+- Set `compared_to` to previous snapshot directory name
+- Set `changes_detected` to true/false based on comparison
+- Write detailed `notes` describing what changed
+
+### Step 9: Report Results to User
+
+**Format:**
+```markdown
+## Snapshot Complete - [TIMESTAMP]
+
+**Snapshot Directory:** snapshots/[TIMESTAMP]-update
+
+### Rev5 Documentation
+- Pages captured: 36
+- Changes since last check: [Yes/No]
+- New pages: [count and list]
+- Modified pages: [count and list]
+- Removed pages: [count and list]
+
+### Public Notices
+- Total notices: 9
+- Latest notice: 0009 (2026-03-25)
+- New notices: [count and list]
+
+### Summary
+[Brief description of changes or "No changes detected since [date]"]
+```
+
+### Step 10: Commit to Git (Optional)
+
+```bash
+git add snapshots/
+git commit -m "$(cat <<'EOF'
+Snapshot [TIMESTAMP] - [summary]
+
+- Rev5 pages: [count]
+- Notices: [count]
+- Changes: [yes/no]
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+EOF
+)"
+```
+
+---
+
+### 🔍 Consistency Requirements
+
+**CRITICAL: Use the same content extraction approach every time**
+
+- Same markdown format for all pages
+- Same selectors for content extraction
+- Same URL sanitization rules
+- Same metadata structure
+
+**Why:** Inconsistent extraction makes comparison impossible. If format changes between runs, ALL pages will appear "changed" even when content is identical.
+
+---
+
+### ⚠️ Common Mistakes to Avoid
+
+1. **❌ Creating snapshot with only metadata**
+   - Cause: Not saving `.html` files for each page
+   - Fix: Ensure Step 3 saves a file for EVERY discovered URL
+
+2. **❌ Inconsistent content extraction**
+   - Cause: Changing how content is summarized between runs
+   - Fix: Use exact same extraction logic every time
+
+3. **❌ Missing pages**
+   - Cause: Not crawling all links recursively
+   - Fix: Follow ALL links under `/docs/rev5/` until no new pages found
+
+4. **❌ Wrong baseline comparison**
+   - Cause: Comparing to wrong previous snapshot
+   - Fix: Always use `snapshots/latest.json` → `baseline_directory`
+
+5. **❌ Skipping notices**
+   - Cause: Forgetting to fetch notices page
+   - Fix: ALWAYS fetch BOTH Rev5 docs AND notices
+
+---
+
+## 🎯 TRIGGER-BASED WORKFLOW (NO AUTOMATION)
+
+**How Snapshots Work:**
+
+1. **User asks trigger question:**
+   - "What has changed?"
+   - "Any updates?"
+   - "What's new?"
+   - "Check for changes"
+   - Any variation asking about website changes
+
+2. **Agent creates NEW snapshot:**
+   - Crawls BOTH sites (Rev5 docs + notices)
+   - Saves all content files + metadata
+   - Creates timestamped snapshot directory
+
+3. **Agent compares to MOST RECENT previous snapshot:**
+   - Loads previous snapshot from `snapshots/latest.json` → `baseline_directory`
+   - Compares new snapshot vs previous snapshot
+   - Detects: new pages, modified pages, removed pages, new notices
+
+4. **Agent reports changes:**
+   - Lists specific pages/notices that changed
+   - Shows what changed in each
+   - States "No changes detected" if nothing changed
+
+**No Scheduled/Automated Checks:**
+- ❌ No cron jobs
+- ❌ No background monitoring
+- ❌ No time-based automation
+- ✅ Only runs when user asks
+
+**Snapshot History:**
+- Each user query creates ONE new snapshot
+- Gaps in dates are normal (snapshots only when user asks)
+- Example timeline:
+  - March 30: User asks → snapshot created
+  - March 31: User asks → snapshot created, compared to March 30
+  - April 2: User asks → snapshot created, compared to March 31
+  - April 5: User asks → snapshot created, compared to April 2 (no April 1, 3, 4 because user didn't ask)
+
+---
+
 ## 🚨 CRITICAL: CHANGE DETECTION IS NOT A CHANGELOG LOOKUP
 
 **TRIGGER-BASED WORKFLOW:**
