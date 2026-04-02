@@ -1,0 +1,8 @@
+{
+  "baseline_directory": "2026-04-02T000000Z-update",
+  "checked_at": "2026-04-02T00:00:00Z",
+  "page_count": 36,
+  "notices_count": 9,
+  "scope": "https://www.fedramp.gov/docs/rev5/ (excluding /docs/20x/) + https://www.fedramp.gov/notices/",
+  "notes": "No changes detected since March 31 check. Notices page added to monitoring scope (9 notices captured, latest 0009 dated 2026-03-25)."
+}

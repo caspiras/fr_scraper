@@ -1,0 +1,33 @@
+# Important Considerations - FedRAMP Documentation
+
+## Overview
+This FedRAMP documentation page outlines key considerations for cloud service providers (CSPs) pursuing authorization. The primary authorization path currently available is Rev5 FedRAMP through federal agencies, though FedRAMP 20x (a modernized approach) is "not expected to be open to the public until FY26 Q4."
+
+## Key Sections
+
+**Existing or Potential Agency Partners**
+CSPs must first establish partnerships with federal agencies to pursue authorization. This may involve existing customers, procurement processes, or responses to RFPs containing FedRAMP requirements.
+
+**Impact Categorization**
+Systems are categorized using FIPS 199 standards across three impact levels:
+
+- **Low Impact**: Limited adverse effects; includes LI-SaaS baseline for applications storing minimal PII
+- **Moderate Impact**: Represents "nearly 80% of CSP services" receiving authorization; serious operational consequences
+- **High Impact**: Severe/catastrophic effects; typically law enforcement, financial, or health systems
+
+Security objectives address confidentiality, integrity, and availability.
+
+**Deployment Models**
+- Government-only community
+- Public (government and non-government customers)
+- Private (single organizations in federal facilities—exempt from FedRAMP mandate)
+- Hybrid combinations
+
+**Service Models**
+Documentation defines SaaS, PaaS, and IaaS per NIST SP 800-145 standards.
+
+**System Stack & Level of Effort**
+CSPs must understand their complete technology stack and ensure FedRAMP authorization of all components through inheritance or traditional authorization. Common barriers include authorization boundary definition gaps, vulnerability scanning issues, outdated software, and inadequate multi-factor authentication implementation.
+
+**Authorization Team Requirements**
+Successful teams typically include project management, customer relationship management, system architecture/engineering, technical writing, and communications expertise.

@@ -1,0 +1,31 @@
+# Significant Changes - FedRAMP Documentation Summary
+
+## Overview
+This page describes how Cloud Service Providers (CSPs) handle significant changes during continuous monitoring. A significant change is defined as "a change that is likely to substantively affect the security or privacy posture of a system."
+
+## Three Types of Changes
+
+**Routine Recurring Changes**
+These are regular maintenance activities that don't require agency authorization officer approval. They fall into two categories:
+- *Ongoing operations*: Regular provisioning, capacity tuning, firewall rule updates, token refresh
+- *Vulnerability management*: Patch updates, signature refreshes, routine code fixes with no breaking changes
+
+**Transformative Changes**
+Rare but substantial alterations that shift the service's risk profile. Examples include adding critical third-party services, changing security categorization, migrating to new infrastructure paradigms, or datacenter migrations involving federal customer data.
+
+**Adaptive Changes**
+Frequent improvements deploying new or modified functionality with minimal security plan changes. Examples include OS updates with breaking changes, multi-week feature developments, cryptographic module replacements, or component swaps requiring procedure adjustments.
+
+## Process Steps
+For transformative and adaptive changes, the workflow involves:
+1. CSP-AO discussion with security impact analysis
+2. SCR documentation and assessor engagement
+3. Assessor review and SAP development
+4. AO approval
+5. Implementation
+6. Testing and SAR development
+7. AO acceptance or remediation
+8. Documentation updates
+
+## Key Flexibility
+Organizations can integrate significant change assessments with annual assessments, and assessment results from approved significant changes may be reused for annual assessments under specific conditions.
