@@ -1,0 +1,24 @@
+# ConMon Performance Management
+
+Describes escalation triggers and actions when CSP is not meeting ConMon requirements.
+
+## Escalation Levels
+
+1. Detailed Finding Review (DFR): Request for root-cause assessment and remedy
+2. CAP: Request for root-cause analysis and formal remediation plan
+3. Suspension: Temporary suspension of ATO(s)
+4. Revocation: Permanent revocation of ATO
+
+Agency AOs must notify FedRAMP (info@fedramp.gov) for Suspension or Revocation decisions and resolutions.
+
+## Key Deficiency Triggers (examples)
+
+- Unique Vulnerability Count increase >20% or >10 from ATO baseline → DFR
+- Non-compliance with scanning requirements (first incident in 6 months) → DFR
+- Non-compliance with scanning requirements (subsequent incidents) → CAP
+- 5+ High vulnerabilities aged >30 days → DFR; aged >60 days → CAP
+- 10+ Moderate vulnerabilities aged >90 days → DFR; aged >120 days → CAP
+- Annual assessment SAP delivered <60 days before ATO anniversary → CAP
+- Annual assessment package late → CAP
+- Late incident notification → CAP
+- Late response to CISA Emergency Directives → CAP

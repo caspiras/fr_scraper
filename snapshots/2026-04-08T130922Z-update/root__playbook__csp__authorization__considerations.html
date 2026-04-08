@@ -1,0 +1,17 @@
+# Important Considerations (CSP Authorization)
+
+Only formal path currently available to most CSPs is a Rev5 FedRAMP authorization performed by a federal agency. FedRAMP 20x pilot not expected to be open to public until FY26 Q4.
+
+## Key Considerations
+
+- Existing/Potential Agency Partners: CSPs must establish partnership with a federal agency as first step
+- Impact Categorization (FIPS 199): Low, Moderate (80% of CSPs), or High impact levels
+  - Low: LI-SaaS or Low baseline
+  - Moderate: ~80% of CSP services
+  - High: Law enforcement, emergency services, financial systems, health systems
+- Deployment Model: Government-Only Community, Public, Private, or Hybrid
+- IaaS vs. PaaS vs. SaaS (per NIST SP 800-145)
+- System Stack: CSO must be authorized according to appropriate FedRAMP baseline
+- Level of Effort: Varies by system complexity, impact level, current security posture
+  - Key LOE categories: Project Management, Engineering, Documentation, Support
+  - Common barriers: Boundary definition, vulnerability scanning gaps, EOL software, lack of FIPS 140 encryption, MFA gaps, poor documentation

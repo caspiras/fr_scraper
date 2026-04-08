@@ -1,8 +1,8 @@
 {
-  "baseline_directory": "2026-04-02T000000Z-update",
-  "checked_at": "2026-04-02T00:00:00Z",
+  "baseline_directory": "2026-04-08T130922Z-update",
+  "checked_at": "2026-04-08T13:09:22Z",
   "page_count": 36,
   "notices_count": 9,
   "scope": "https://www.fedramp.gov/docs/rev5/ (excluding /docs/20x/) + https://www.fedramp.gov/notices/",
-  "notes": "No changes detected since March 31 check. Notices page added to monitoring scope (9 notices captured, latest 0009 dated 2026-03-25)."
+  "notes": "No changes detected since April 7 check. All 36 pages unchanged (VDR, CCM, SCN byte-for-byte identical to April 7). No new notices (still 9, latest 0009 dated 2026-03-25)."
 }

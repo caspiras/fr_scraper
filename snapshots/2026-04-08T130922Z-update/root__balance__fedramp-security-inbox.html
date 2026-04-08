@@ -1,0 +1,31 @@
+# FedRAMP Security Inbox
+
+Effective Date(s): Required (Wide Release) beginning 2026-01-05. Applies to all FedRAMP Rev5 cloud services (Authorized, In Process, FedRAMP Ready).
+
+Mandatory enforcement timeline:
+- 2026-01-05: Emergency Test begins
+- 2026-03-01: Corrective action = public notification of non-compliance
+- 2026-05-01: Corrective action = complete removal from FedRAMP Marketplace
+- 2026-07-01: Corrective action = ban on relisting for three months
+
+## FedRAMP's Responsibilities
+
+- FSI-FRP-VRE: FedRAMP MUST send messages from @fedramp.gov or @gsa.gov with SPF/DKIM/DMARC.
+- FSI-FRP-CDS: FedRAMP MUST convey criticality in subject line (Emergency / Emergency Test / Important).
+- FSI-FRP-UFS: FedRAMP MUST send Emergency/Emergency Test messages from fedramp_security@gsa.gov or fedramp_security@fedramp.gov.
+- FSI-FRP-PNT: FedRAMP MUST post public notice at least 10 business days before Emergency Test.
+- FSI-FRP-RQA: FedRAMP MUST clearly specify required actions in messages requiring elevated reaction.
+- FSI-FRP-ERT: FedRAMP MUST specify timeframes. Default: High Impact=12hrs, Moderate=2nd business day by 3pm ET, Low=3rd business day by 3pm ET.
+- FSI-FRP-COR: FedRAMP MUST specify corrective actions for failure.
+- FSI-FRP-RPM: FedRAMP MAY track and publicly share reaction times.
+
+## General Provider Responsibilities
+
+- FSI-CSO-INB: Providers MUST establish and maintain a FedRAMP Security Inbox email address.
+- FSI-CSO-NOC: Providers MUST immediately notify FedRAMP of any changes in FSI address.
+- FSI-CSO-TFG: Providers MUST treat email from @fedramp.gov or @gsa.gov as from FedRAMP by default.
+- FSI-CSO-RCV: Providers MUST receive email without disruption and without requiring additional FedRAMP actions.
+- FSI-CSO-CRA: Providers MUST complete required actions in Emergency/Emergency Test messages within specified timeframes.
+- FSI-CSO-EMR: Providers MUST route Emergency messages to a senior security official.
+- FSI-CSO-IMA: Providers SHOULD complete required actions in Important messages within specified timeframes.
+- FSI-CSO-ACK: Providers SHOULD promptly and automatically acknowledge receipt of FedRAMP messages.

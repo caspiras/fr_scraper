@@ -77,6 +77,27 @@ This file contains the **guidelines** for how you should operate when monitoring
 
 **🚨 CRITICAL: Every snapshot MUST include ALL content files + metadata. A snapshot with only `_meta.json` is INCOMPLETE and INVALID.**
 
+### ⏰ CRITICAL: CURRENT DATE/TIME AWARENESS
+
+**🚨 BEFORE DOING ANYTHING - CHECK THE CURRENT DATE/TIME**
+
+1. **Get the actual current UTC timestamp:**
+   - Use `date -u +"%Y-%m-%dT%H%M%SZ"` to get current UTC time
+   - This is what you'll use for the new snapshot directory name
+   - This is what you'll record in `checked_at` field
+
+2. **Understand temporal context:**
+   - If today is April 8th and the latest snapshot is from April 6th, that snapshot is 2 days old
+   - You MUST create a NEW snapshot for April 8th (today)
+   - You MUST compare the new April 8th snapshot against the April 6th snapshot (the most recent previous one)
+   - You MUST NOT act like today is April 6th or April 7th
+
+3. **Baseline selection logic:**
+   - Read `snapshots/latest.json` to get `baseline_directory`
+   - This is the most recent snapshot from the PREVIOUS check
+   - Your NEW snapshot will be compared against this baseline
+   - After creating the new snapshot, UPDATE `latest.json` to point to your new snapshot
+
 ### When to Create Snapshots
 
 **🚨 TRIGGER-BASED ONLY - NO AUTOMATION**
@@ -92,9 +113,11 @@ Snapshots are created ONLY when the user asks trigger words:
 - ❌ Time-based intervals
 
 **Workflow:**
-1. User asks trigger words → Create new snapshot NOW
-2. Compare new snapshot to most recent previous snapshot
-3. Report changes detected
+1. User asks trigger words → Get CURRENT date/time
+2. Create new snapshot NOW using current timestamp
+3. Compare new snapshot to most recent previous snapshot (from `latest.json`)
+4. Report changes detected
+5. UPDATE `latest.json` to point to the new snapshot
 
 ### Snapshot Directory Structure
 
@@ -277,18 +300,42 @@ https://www.fedramp.gov/docs/rev5/playbook/csp/authorization/ssp/
 
 ### Step 6: Update Latest Pointer
 
+**🚨 CRITICAL: ALWAYS UPDATE THIS FILE AFTER CREATING A SNAPSHOT**
+
 **File:** `snapshots/latest.json`
+
+**This file MUST be updated every time you create a new snapshot.** Failure to update this file will cause the tool to use stale baselines.
 
 ```json
 {
-  "baseline_directory": "2026-04-02T170000Z-update",
-  "checked_at": "2026-04-02T17:00:00Z",
+  "baseline_directory": "2026-04-08T130922Z-update",
+  "checked_at": "2026-04-08T13:09:22Z",
   "page_count": 36,
   "notices_count": 9,
   "scope": "https://www.fedramp.gov/docs/rev5/ (excluding /docs/20x/) + https://www.fedramp.gov/notices/",
   "notes": "Summary of latest check results"
 }
 ```
+
+**When to update:**
+- Immediately after creating a new snapshot
+- After completing Step 5 (Create Metadata File)
+- Before Step 7 (Verify Snapshot Completeness)
+
+**What to update:**
+- `baseline_directory`: Set to the NEW snapshot directory name you just created
+- `checked_at`: Set to the timestamp from the NEW snapshot
+- `page_count`: Set to the page count from the NEW snapshot
+- `notices_count`: Set to the notice count from the NEW snapshot
+- `notes`: Set to the summary of what changed in the NEW snapshot
+
+**Example workflow:**
+1. Current time is 2026-04-08T13:09:22Z
+2. Create new snapshot: `snapshots/2026-04-08T130922Z-update/`
+3. Compare to baseline from `latest.json` (e.g., `2026-04-06T162005Z-update`)
+4. Write new snapshot's `_meta.json`
+5. **IMMEDIATELY UPDATE `latest.json`** to point to `2026-04-08T130922Z-update`
+6. Next time user asks, the baseline will be `2026-04-08T130922Z-update` (correct!)
 
 ### Step 7: Verify Snapshot Completeness
 
@@ -308,10 +355,27 @@ https://www.fedramp.gov/docs/rev5/playbook/csp/authorization/ssp/
 
 ### Step 8: Compare to Previous Snapshot (If Exists)
 
+**🚨 BEFORE COMPARING - VERIFY TEMPORAL LOGIC:**
+
+1. **Check current date/time:** `date -u`
+   - Example: If current time is 2026-04-08 13:09:22 UTC
+   - Your new snapshot should be: `2026-04-08T130922Z-update`
+
+2. **Load the baseline (previous snapshot):**
+   - Read `snapshots/latest.json` → get `baseline_directory`
+   - Example: `baseline_directory` might be `2026-04-06T162005Z-update`
+   - This is from 2 days ago (April 6th)
+   - This is CORRECT - you're comparing today (April 8th) vs. last check (April 6th)
+
+3. **If `latest.json` is missing or corrupt:**
+   - Find the newest timestamped directory in `snapshots/`
+   - Use that as the baseline
+   - Example: `ls -t snapshots/ | grep -E '^[0-9]{4}' | head -1`
+
 **Load Previous Snapshot:**
 1. Read `snapshots/latest.json` → get `baseline_directory`
-2. Load `{previous_dir}/_meta.json`
-3. Load previous `.html` files
+2. Load `{baseline_directory}/_meta.json`
+3. Load previous `.html` files from `{baseline_directory}/`
 
 **Compare:**
 - **Page count changes:** Current vs previous `page_count`
@@ -320,10 +384,15 @@ https://www.fedramp.gov/docs/rev5/playbook/csp/authorization/ssp/
 - **Notice changes:** New notices (compare `notices_latest_id`)
 - **Content changes:** For each .html file, compare text content
 
-**Update `_meta.json`:**
-- Set `compared_to` to previous snapshot directory name
+**Update NEW snapshot's `_meta.json`:**
+- Set `compared_to` to previous snapshot directory name (from `latest.json`)
 - Set `changes_detected` to true/false based on comparison
 - Write detailed `notes` describing what changed
+
+**Report temporal context:**
+- "Changes since last check on [date/time from baseline]"
+- "Last check was [X days/hours] ago"
+- NOT "Changes since yesterday" if last check was 2 days ago
 
 ### Step 9: Report Results to User
 
@@ -401,6 +470,102 @@ EOF
 5. **❌ Skipping notices**
    - Cause: Forgetting to fetch notices page
    - Fix: ALWAYS fetch BOTH Rev5 docs AND notices
+
+6. **❌ Not updating latest.json**
+   - Cause: Forgetting to update `latest.json` after creating new snapshot
+   - Fix: ALWAYS update `latest.json` in Step 6 after creating snapshot
+   - Symptom: Tool uses stale baseline from 2+ days ago
+
+7. **❌ Wrong date/time awareness**
+   - Cause: Not checking current date/time, assuming wrong date
+   - Fix: ALWAYS check `date -u` before creating snapshot
+   - Symptom: On April 8th, tool acts like it's April 7th or uses April 6th baseline without acknowledging the gap
+
+8. **❌ Not explaining temporal gap**
+   - Cause: Not reporting how long since last check
+   - Fix: Always report "Changes since [date/time] ([X days/hours ago])"
+   - Example: "Changes since April 6th at 4:20 PM (2 days ago)"
+
+---
+
+## 🐛 TROUBLESHOOTING: DATE/TIME ISSUES
+
+### Problem: Tool uses stale baseline from 2+ days ago
+
+**Symptoms:**
+- User asks about changes on April 8th morning
+- Tool compares against April 6th baseline
+- Tool acts like current date is April 7th
+- Tool doesn't acknowledge the 2-day gap
+
+**Root Causes:**
+1. ❌ Not checking current date/time before creating snapshot
+2. ❌ Not updating `latest.json` after creating snapshot
+3. ❌ Not reporting temporal context ("X days since last check")
+
+**Solution - Mandatory Checklist:**
+
+When user asks "What has changed?" or any variation:
+
+□ **Step 0: Check current date/time**
+  - Run: `date -u +"%Y-%m-%dT%H%M%SZ"`
+  - Understand: If output is `2026-04-08T13:09:22Z`, then today is April 8th
+  - Use this timestamp for new snapshot directory name
+
+□ **Step 1: Load baseline from latest.json**
+  - Read `snapshots/latest.json` → get `baseline_directory`
+  - Example: `2026-04-06T162005Z-update` (April 6th at 4:20 PM)
+  - Calculate gap: April 8th - April 6th = 2 days ago
+
+□ **Step 2: Create NEW snapshot with CURRENT timestamp**
+  - Directory: `snapshots/2026-04-08T130922Z-update/` (today!)
+  - NOT `2026-04-07T...` or any other date
+
+□ **Step 3: Compare new vs. baseline**
+  - New: April 8th snapshot (just created)
+  - Baseline: April 6th snapshot (from `latest.json`)
+  - Gap: 2 days
+
+□ **Step 4: UPDATE latest.json**
+  - Set `baseline_directory` = `2026-04-08T130922Z-update`
+  - Set `checked_at` = `2026-04-08T13:09:22Z`
+  - This ensures next check uses April 8th as baseline
+
+□ **Step 5: Report with temporal context**
+  - ✅ "Changes since April 6th at 4:20 PM (2 days ago)"
+  - ✅ "Last checked 2 days ago on April 6th"
+  - ❌ NOT "Changes since yesterday" (incorrect - it was 2 days ago)
+  - ❌ NOT acting like today is April 7th
+
+**Example Correct Behavior:**
+
+```
+User: "What has changed?" (asked on April 8th morning)
+
+Agent:
+1. Checks current time: April 8th, 9:00 AM UTC
+2. Reads latest.json: baseline is April 6th, 4:20 PM UTC
+3. Creates new snapshot: 2026-04-08T090000Z-update
+4. Compares April 8th snapshot vs April 6th baseline
+5. Updates latest.json to point to April 8th snapshot
+6. Reports: "Checked FedRAMP websites on April 8th at 9:00 AM.
+   Comparing to last check on April 6th at 4:20 PM (2 days ago).
+   Changes detected: [...]"
+```
+
+**Example WRONG Behavior:**
+
+```
+User: "What has changed?" (asked on April 8th morning)
+
+Agent:
+1. ❌ Doesn't check current time
+2. ❌ Assumes current date is April 7th
+3. ❌ Uses April 6th baseline without explaining gap
+4. ❌ Creates snapshot with wrong timestamp
+5. ❌ Doesn't update latest.json
+6. ❌ Reports: "Changes since yesterday" (wrong - it's been 2 days)
+```
 
 ---
 
