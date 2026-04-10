@@ -1,10 +1,32 @@
-# FedRAMP Rev5 Documentation Query Specification
+# FedRAMP Rev5 Documentation Monitor
 
-This project contains a YAML specification file for querying and extracting content from the FedRAMP Rev5 documentation website at https://www.fedramp.gov/docs/rev5/
+This project monitors the FedRAMP Rev5 documentation websites for changes, providing detailed tracking of documentation updates and public notices.
+
+## 🚨 FOR AI AGENTS: READ THIS FIRST
+
+**If you are an AI agent (Claude, Cursor, etc.) working on this project:**
+
+1. **READ THESE FILES IMMEDIATELY BEFORE DOING ANYTHING:**
+   - `CLAUDE.md` - Mandatory agent instructions and workflow
+   - `spec.md` - Complete operational specification
+   - `snapshots/latest.json` - Current baseline pointer
+
+2. **CRITICAL: When user asks "What has changed?"**
+   - You MUST do a complete fresh crawl of BOTH websites
+   - You MUST create a NEW snapshot with current timestamp
+   - You MUST update `snapshots/latest.json`
+   - See CLAUDE.md for step-by-step requirements
 
 ## Overview
 
-The specification file (`fedramp-rev5-spec.yaml`) provides a structured mapping of:
+This tool monitors TWO FedRAMP websites:
+- **https://www.fedramp.gov/docs/rev5/** (Rev5 Documentation - 40-50+ pages)
+- **https://www.fedramp.gov/notices/** (Public Notices - single page)
+
+The specification file (`spec.md`) provides:
+- Complete monitoring workflow and requirements
+- Snapshot creation process
+- Change detection methodology
 - Site navigation and structure
 - Document categories and types
 - URL patterns for different resources
@@ -16,8 +38,20 @@ The specification file (`fedramp-rev5-spec.yaml`) provides a structured mapping 
 ```
 .
 ├── README.md                    # This file
-└── fedramp-rev5-spec.yaml      # Main specification file
+├── CLAUDE.md                    # AI agent instructions (READ FIRST)
+├── .cursorrules                 # Cursor-specific rules
+├── spec.md                      # Complete specification and workflow
+└── snapshots/                   # Snapshot storage
+    ├── latest.json              # Pointer to current baseline
+    └── YYYY-MM-DDTHHMMSSZ-*/    # Timestamped snapshots
 ```
+
+## Key Files
+
+- **CLAUDE.md** - Mandatory instructions for AI agents. Read this first in every new session.
+- **spec.md** - Complete operational specification with detailed monitoring workflow.
+- **snapshots/latest.json** - Points to the most recent snapshot (baseline for comparisons).
+- **snapshots/[timestamp]-update/** - Timestamped snapshot directories containing fetched website content.
 
 ## Usage Examples
 
@@ -197,11 +231,47 @@ Build URLs using the pattern and known values.
 - Playbooks are available in both HTML and PDF formats
 - Site structure may change; verify selectors periodically
 
+## How It Works
+
+### For Users
+
+When you ask "What has changed?" or "Check for changes":
+1. The agent checks the current date/time
+2. Loads the baseline from `snapshots/latest.json`
+3. Crawls BOTH websites fresh from fedramp.gov
+4. Creates a new timestamped snapshot
+5. Compares new vs baseline snapshot
+6. Reports changes detected
+7. Updates `latest.json` to point to new snapshot
+
+### For AI Agents
+
+**Read CLAUDE.md first.** It contains the mandatory workflow you must follow.
+
+Critical requirements:
+- Always check current date with `date -u` before doing anything
+- Always create a NEW snapshot when checking for changes
+- Always fetch fresh content from websites (don't just compare old snapshots)
+- Always update `snapshots/latest.json` after creating snapshot
+- Always report temporal context ("Changes since [date] ([X days] ago)")
+
+## Monitored Websites
+
+1. **Rev5 Documentation** (40-50+ pages)
+   - Base: https://www.fedramp.gov/docs/rev5/
+   - All pages under `/docs/rev5/` path
+
+2. **Public Notices** (single page)
+   - URL: https://www.fedramp.gov/notices/
+
 ## Version
 
-Specification created: 2026-03-23
-Target site: https://www.fedramp.gov/docs/rev5/
-Format version: Rev5
+- Created: 2026-03-23
+- Updated: 2026-04-10
+- Target sites: 
+  - https://www.fedramp.gov/docs/rev5/
+  - https://www.fedramp.gov/notices/
+- Format version: Rev5
 
 ## License
 

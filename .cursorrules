@@ -1,0 +1,203 @@
+# FedRAMP Rev5 Documentation Monitor - Cursor Rules
+
+## 🚨 MANDATORY FIRST ACTIONS - READ THIS BEFORE DOING ANYTHING
+
+When starting ANY new session or when the user asks about changes:
+
+### Step 0: Check Current Date/Time
+```bash
+date -u +"%Y-%m-%dT%H%M%SZ"
+```
+**CRITICAL:** You MUST know what TODAY is before proceeding. Do not assume the date.
+
+### Step 1: Read Required Files
+```
+1. Read: spec.md (complete operational guidelines)
+2. Read: snapshots/latest.json (baseline directory and last check time)
+```
+
+## Project Purpose
+
+This project monitors TWO websites for changes:
+- https://www.fedramp.gov/docs/rev5/ (40-50+ documentation pages)
+- https://www.fedramp.gov/notices/ (public notices page)
+
+## 🚫 FORBIDDEN ACTIONS When User Asks "What Has Changed?"
+
+**NEVER do these:**
+- ❌ Run `git log`, `git status`, or any git commands
+- ❌ Report on changes to spec.md or local files
+- ❌ Just compare existing snapshot files without fetching fresh website content
+- ❌ Skip creating a NEW snapshot with current timestamp
+- ❌ Skip updating snapshots/latest.json after creating snapshot
+- ❌ Assume the current date without checking
+- ❌ Fetch only a "changelog" page
+
+## ✅ REQUIRED ACTIONS When User Asks "What Has Changed?"
+
+**You MUST do ALL of these steps in order:**
+
+1. **Get current timestamp:**
+   ```bash
+   date -u +"%Y-%m-%dT%H%M%SZ"
+   ```
+
+2. **Load baseline:**
+   - Read `snapshots/latest.json`
+   - Get `baseline_directory` field
+   - This is the previous snapshot to compare against
+
+3. **Create NEW snapshot directory:**
+   - Use current timestamp: `snapshots/YYYY-MM-DDTHHMMSSZ-update/`
+   - This MUST be created fresh every time
+
+4. **Fetch fresh content from BOTH websites:**
+   - **Rev5 Docs:** Crawl ALL pages starting from https://www.fedramp.gov/docs/rev5/
+     - Extract all links under /docs/rev5/
+     - Fetch EVERY page individually (40-50+ WebFetch calls)
+     - Save each as .html file in new snapshot directory
+   - **Notices:** Fetch https://www.fedramp.gov/notices/
+     - Extract all notice entries
+     - Include in _meta.json
+
+5. **Compare new snapshot vs baseline:**
+   - Load baseline snapshot from directory specified in latest.json
+   - Compare page by page
+   - Detect: new pages, removed pages, content changes, new notices
+
+6. **Create _meta.json in new snapshot:**
+   - Include all required fields from spec.md
+   - Set `compared_to` to baseline directory name
+   - Set `checked_at` to current timestamp
+
+7. **UPDATE snapshots/latest.json:**
+   - Set `baseline_directory` to NEW snapshot name
+   - Set `checked_at` to current timestamp
+   - Update page/notice counts
+   - **This step is MANDATORY - do not skip it**
+
+8. **Report findings:**
+   - "Changes since [baseline date/time] ([X days/hours] ago)"
+   - List specific pages that changed
+   - List new notices
+   - Show what changed in each
+
+## Critical Requirements
+
+### Date/Time Awareness
+- ALWAYS check current date with `date -u` first
+- If today is April 10th, understand that TODAY is April 10th
+- If baseline is from April 9th, report "1 day ago"
+- DO NOT act like today is April 9th or April 8th
+
+### Fresh Content Fetching
+- MUST fetch fresh content from fedramp.gov websites every time
+- DO NOT just compare files in existing snapshot directories
+- Creating a snapshot means CRAWLING the websites and SAVING new content
+
+### Baseline Management
+- ALWAYS use `snapshots/latest.json` to find baseline
+- ALWAYS update `snapshots/latest.json` after creating new snapshot
+- If you don't update latest.json, the next check will use stale baseline
+
+### Complete Site Crawling
+- Rev5 docs: Crawl ALL 40-50+ pages individually
+- This is NOT a single page check
+- This is NOT a changelog lookup
+- This IS a comprehensive page-by-page crawl and comparison
+
+## Workflow Example (CORRECT)
+
+```
+User: "What has changed?"
+
+You MUST:
+1. Run: date -u → Get "2026-04-10T16:15:18Z"
+2. Read: snapshots/latest.json → baseline_directory: "2026-04-09T151318Z-update"
+3. Calculate: April 10 - April 9 = 1 day ago
+4. Create: snapshots/2026-04-10T161518Z-update/
+5. Crawl: Fetch ALL pages from https://www.fedramp.gov/docs/rev5/ (fresh from website)
+6. Crawl: Fetch https://www.fedramp.gov/notices/ (fresh from website)
+7. Compare: New content vs baseline content
+8. Write: snapshots/2026-04-10T161518Z-update/_meta.json
+9. Update: snapshots/latest.json (set baseline_directory to 2026-04-10T161518Z-update)
+10. Report: "Changes since April 9 at 3:13 PM (1 day ago): [details]"
+```
+
+## Workflow Example (WRONG - Don't Do This)
+
+```
+User: "What has changed?"
+
+❌ WRONG:
+1. ❌ Doesn't check current date
+2. ❌ Compares snapshots/2026-04-09T151318Z-update/ vs snapshots/2026-04-08T130922Z-update/
+3. ❌ Doesn't fetch fresh content from websites
+4. ❌ Doesn't create new snapshot for today (April 10)
+5. ❌ Doesn't update latest.json
+6. ❌ Reports changes from yesterday without acknowledging it's stale
+```
+
+## What "The Website" Means
+
+When user says "the website" or "what has changed":
+- ✅ They mean: https://www.fedramp.gov/docs/rev5/ and https://www.fedramp.gov/notices/
+- ❌ They DO NOT mean: This git repository, spec.md, or local files
+
+## Snapshot Structure
+
+A complete snapshot MUST contain:
+- `_meta.json` file with all required fields
+- 40-50+ `.html` files (one per Rev5 doc page)
+- All URLs listed in `_meta.json` urls array
+- Complete notices_snapshot array in `_meta.json`
+
+A snapshot with ONLY `_meta.json` is INCOMPLETE and INVALID.
+
+## File Naming Convention
+
+URL to filename conversion:
+- https://www.fedramp.gov/docs/rev5/ → root.html
+- https://www.fedramp.gov/docs/rev5/balance/ → root__balance.html
+- https://www.fedramp.gov/docs/rev5/playbook/csp/authorization/ssp/ → root__playbook__csp__authorization__ssp.html
+
+Rules:
+- Remove `https://www.fedramp.gov/docs/rev5/`
+- Replace `/` with `__`
+- Use `root` for main index
+- Keep all path segments
+
+## Temporal Context Requirements
+
+ALWAYS include temporal context when reporting:
+- ✅ "Changes since April 9th at 3:13 PM (1 day ago)"
+- ✅ "Last checked 2 days ago on April 8th"
+- ❌ NOT "Changes since yesterday" if last check was 2+ days ago
+- ❌ NOT acting like today is a different date
+
+## Summary Checklist
+
+Before responding to "What has changed?", verify you will:
+- [ ] Check current date/time with `date -u`
+- [ ] Read spec.md and snapshots/latest.json
+- [ ] Create NEW snapshot directory with CURRENT timestamp
+- [ ] Fetch fresh content from BOTH websites (not just compare old files)
+- [ ] Save all fetched pages to new snapshot directory
+- [ ] Compare new snapshot vs baseline from latest.json
+- [ ] Create _meta.json in new snapshot
+- [ ] UPDATE snapshots/latest.json to point to new snapshot
+- [ ] Report with temporal context (X days/hours since last check)
+
+If you skip ANY of these steps, you are doing it WRONG.
+
+## Reference Files
+
+- Specification: spec.md
+- Latest pointer: snapshots/latest.json
+- Snapshots: snapshots/YYYY-MM-DDTHHMMSSZ-update/
+
+## Key Principle
+
+**Every "What has changed?" query = Fresh crawl of BOTH websites + New snapshot creation + Comparison + Update latest.json**
+
+NOT: "Compare old snapshots without fetching new content"

@@ -1,0 +1,473 @@
+Collaborative Continuous Monitoring - FedRAMP Documentation
+
+Skip to content
+
+# Collaborative Continuous Monitoring¶
+
+Effective Date(s) & Overall Applicability for Rev5
+
+FedRAMP recommends that participants in the Collaborative Continuous Mounting beta also adopt the Vulnerability Detection and Response process and the Significant Change Notifications process.
+
+- Optional (Open Beta) beginning 2026-02-02.
+- Providers MUST notify FedRAMP of intent to participate in the Collaborative Continuous Monitoring Rev5 Open Beta by submitting a sign-up form to FedRAMP.
+- Rev5 Authorized providers MAY adopt this process beginning February 2, 2026 as part of the Open Beta.
+- Providers MUST plan to address all requirements and recommendations in this process by the end of the Open Beta on May 22, 2026.
+- It is up to providers to coordinate with their active agency customers to ensure agency customers will not be negatively impacted by the provider's participation in this beta.
+
+Background & Authority
+
+- [OMB Circular A-130: Managing Information as a Strategic Resource](https://whitehouse.gov/wp-content/uploads/legacydrupalfiles/omb/circulars/A130/a130revised.pdf) section 4 (c) states that agencies SHALL "conduct and document security and privacy control assessments prior to the operation of an information system, and periodically thereafter, consistent with the frequency defined in the agency information security continuous monitoring (ISCM) and privacy continuous monitoring (PCM) strategies and the agency risk tolerance"
+- [The FedRAMP Authorization Act (44 USC § 3609 (a)(1))](https://fedramp.gov/docs/authority/law/#a-roles-and-responsibilities) directs the Administrator of the General Services Administration to "develop, coordinate, and implement a process … including, as appropriate, oversight of continuous monitoring of cloud computing products and services"
+
+Agencies are required to continuously monitor all of their information systems following a documented process integrated into their Information Security Continuous Monitoring (ISCM) strategy. These strategies are specific to each agency and may even vary at the bureau, component, or information system levels.
+
+The concept behind collaborative continuous monitoring is unique to government customers and creates a burden for commercial cloud service providers. This process attempts to minimize this burden by encouraging the use of automated monitoring and review of authorization data required by other FedRAMP standards and limiting the expected human interaction costs for cloud service providers and agencies. Agencies are expected to use information from the cloud service provider collaboratively in accordance with their agency ISCM strategy without blocking other agencies from making their own risk-based decisions about ongoing authorization.
+
+---
+
+## Ongoing Authorization Reports¶
+
+These requirements and recommendations for Ongoing Authorization Reports apply to all cloud service offerings following the CCM process.
+
+### Report Availability¶
+
+CCM-OAR-AVL
+
+Former ID: FRR-CCM-01
+
+Changelog:
+
+- 2026-02-04: Re-ordered phrasing; removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers MUST make an Ongoing Authorization Report available to all necessary parties every 3 months, covering the entire period since the previous summary, in a consistent format that is human readable; this report MUST include high-level summaries of at least the following information:
+
+Changes to authorization data
+
+Planned changes to authorization data during at least the next 3 months
+
+Accepted vulnerabilities
+
+Transformative changes
+
+Updated recommendations or best practices for security, configuration, usage, or similar aspects of the cloud service offering
+
+---
+
+### Next Report Date¶
+
+CCM-OAR-NRD
+
+Former ID: FRR-CCM-03
+
+Changelog:
+
+- 2026-02-04: Clarified; removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers MUST publicly include the target date for their next Ongoing Authorization Report with other public authorization data.
+
+---
+
+Terms: [Authorization data](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#authorization-data), [Ongoing Authorization Report (OAR)](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#ongoing-authorization-report-oar)
+
+### Feedback Mechanism¶
+
+CCM-OAR-FBM
+
+Former ID: FRR-CCM-04
+
+Changelog:
+
+- 2026-02-04: Added note; removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers MUST establish and share an asynchronous mechanism for all necessary parties to provide feedback or ask questions about each Ongoing Authorization Report.
+
+---
+
+Note: This could be email by default but providers are encouraged to consider something more interactive as appropriate.
+
+---
+
+Terms: [All Necessary Parties](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#all-necessary-parties), [Ongoing Authorization Report (OAR)](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#ongoing-authorization-report-oar)
+
+### Anonymized Feedback Summary¶
+
+CCM-OAR-AFS
+
+Former ID: FRR-CCM-05
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers MUST maintain an anonymized and desensitized summary of the feedback, questions, and answers about each Ongoing Authorization Report as an addendum to the Ongoing Authorization Report.
+
+---
+
+Note: This is intended to encourage sharing of information and decrease the burden on the cloud service provider - providing this summary will reduce duplicate questions from agencies and ensure FedRAMP has access to this information. It is generally in the provider’s interest to update this addendum frequently throughout the quarter.
+
+---
+
+Terms: [Agency](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#agency), [Ongoing Authorization Report (OAR)](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#ongoing-authorization-report-oar)
+
+### Limit Sensitive Information¶
+
+CCM-OAR-LSI
+
+Former ID: FRR-CCM-06
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers MUST NOT irresponsibly disclose sensitive information in an Ongoing Authorization Report that would likely have an adverse effect on the cloud service offering.
+
+---
+
+Terms: [Cloud Service Offering](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#cloud-service-offering), [Likely](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#likely), [Ongoing Authorization Report (OAR)](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#ongoing-authorization-report-oar)
+
+### Spread Out Reports¶
+
+CCM-OAR-SOR
+
+Former ID: FRR-CCM-02
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers SHOULD establish a regular 3 month cycle for Ongoing Authorization Reports that is spread out from the beginning, middle, or end of each quarter.
+
+---
+
+Note: This recommendation is intended to discourage hundreds of cloud service providers from releasing their Ongoing Authorization Reports during the first or last week of each quarter because that is the easiest way for a single provider to track this deliverable; the result would overwhelm agencies with many cloud services. Widely used cloud service providers are encouraged to work with their customers to identify ideal timeframes for this cycle.
+
+---
+
+Terms: [Agency](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#agency), [Regularly](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#regularly)
+
+### Responsible Public Sharing¶
+
+CCM-OAR-RPS
+
+Former ID: FRR-CCM-07
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers MAY responsibly share some or all of the information an Ongoing Authorization Report publicly or with other parties if the provider determines doing so will NOT likely have an adverse effect on the cloud service offering.
+
+---
+
+Terms: [Cloud Service Offering](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#cloud-service-offering), [Likely](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#likely), [Ongoing Authorization Report (OAR)](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#ongoing-authorization-report-oar)
+
+## Quarterly Reviews¶
+
+These requirements and recommendations for Quarterly Reviews apply to all cloud service offerings following the CCM process.
+
+### Quarterly Review Meeting¶
+
+CCM-QTR-MTG
+
+Changelog:
+
+- 2026-02-04: Combined requirements and recommendations that varied by impact level into a single set with minor wording modification as appropriate.
+
+LowModerateHigh
+
+Providers SHOULD host a synchronous Quarterly Review every 3 months, open to all necessary parties, to review aspects of the most recent Ongoing Authorization Reports that the provider determines are of the most relevance to agencies.
+
+Providers MUST host a synchronous Quarterly Review every 3 months, open to all necessary parties, to review aspects of the most recent Ongoing Authorization Reports that the provider determines are of the most relevance to agencies.
+
+Providers MUST host a synchronous Quarterly Review every 3 months, open to all necessary parties, to review aspects of the most recent Ongoing Authorization Reports that the provider determines are of the most relevance to agencies.
+
+---
+
+Terms: [Agency](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#agency), [All Necessary Parties](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#all-necessary-parties), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review)
+
+### Meeting Registration Info¶
+
+CCM-QTR-REG
+
+Former ID: FRR-CCM-QR-05
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers MUST include either a registration link or a downloadable calendar file with meeting information for Quarterly Reviews in the authorization data available to all necessary parties required by ADS-CSL-UCP and ADS-CSO-FCT.
+
+---
+
+Terms: [All Necessary Parties](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#all-necessary-parties), [Authorization data](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#authorization-data), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review)
+
+### Next Review Date¶
+
+CCM-QTR-NRD
+
+Former ID: FRR-CCM-QR-06
+
+Changelog:
+
+- 2026-02-04: Clarified; removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers MUST publicly include the target date for their next Quarterly Review with other public authorization data.
+
+---
+
+Terms: [Authorization data](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#authorization-data), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review)
+
+### No Irresponsible Disclosure¶
+
+CCM-QTR-NID
+
+Former ID: FRR-CCM-QR-04
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers MUST NOT irresponsibly disclose sensitive information in a Quarterly Review that would likely have an adverse effect on the cloud service offering.
+
+---
+
+Terms: [Cloud Service Offering](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#cloud-service-offering), [Likely](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#likely), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review)
+
+### Schedule Around Reports¶
+
+CCM-QTR-SAR
+
+Former ID: FRR-CCM-QR-03
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers SHOULD regularly schedule Quarterly Reviews to occur at least 3 business days after releasing an Ongoing Authorization Report AND within 10 business days of such release.
+
+---
+
+Terms: [Ongoing Authorization Report (OAR)](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#ongoing-authorization-report-oar), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review), [Regularly](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#regularly)
+
+### Additional Content¶
+
+CCM-QTR-ACT
+
+Former ID: FRR-CCM-QR-07
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers SHOULD include additional information in Quarterly Reviews that the provider determines is of interest, use, or otherwise relevant to agencies.
+
+---
+
+Terms: [Agency](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#agency), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review)
+
+### Record/Transcribe Reviews¶
+
+CCM-QTR-RTR
+
+Former ID: FRR-CCM-QR-09
+
+Changelog:
+
+- 2026-02-04: Simplified; removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers SHOULD record or transcribe Quarterly Reviews and make such available to all necessary parties with other authorization data.
+
+---
+
+Terms: [All Necessary Parties](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#all-necessary-parties), [Authorization data](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#authorization-data), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review)
+
+### Restrict Third Parties¶
+
+CCM-QTR-RTP
+
+Former ID: FRR-CCM-QR-08
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers SHOULD NOT invite third parties to attend Quarterly Reviews intended for agencies unless they have specific relevance.
+
+---
+
+Note: This is because agencies are less likely to actively participate in meetings with third parties; the cloud service provider's independent assessor should be considered relevant by default.
+
+---
+
+Terms: [Agency](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#agency), [Likely](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#likely), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review)
+
+### Share Recordings Responsibly¶
+
+CCM-QTR-SRR
+
+Former ID: FRR-CCM-QR-10
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers MAY responsibly share recordings or transcriptions of Quarterly Reviews with the public or other parties ONLY if the provider removes all agency information (comments, questions, names, etc.) AND determines sharing will NOT likely have an adverse effect on the cloud service offering.
+
+---
+
+Terms: [Agency](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#agency), [Cloud Service Offering](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#cloud-service-offering), [Likely](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#likely), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review)
+
+### Share Content Responsibly¶
+
+CCM-QTR-SCR
+
+Former ID: FRR-CCM-QR-11
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Providers MAY responsibly share content prepared for a Quarterly Review with the public or other parties if the provider determines doing so will NOT likely have an adverse effect on the cloud service offering.
+
+---
+
+Terms: [Cloud Service Offering](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#cloud-service-offering), [Likely](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#likely), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review)
+
+## Agency Guidance¶
+
+These requirements and recommends for agencies apply to all agencies reusing a FedRAMP Certification or Validation for a cloud service offering following the CCM process.
+
+### Review Ongoing Reports¶
+
+CCM-AGM-ROR
+
+Former ID: FRR-CCM-AG-01
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Agencies MUST review each Ongoing Authorization Report to understand how changes to the cloud service offering may impact the previously agreed-upon risk tolerance documented in the agency's Authorization to Operate of a federal information system that includes the cloud service offering in its boundary.
+
+---
+
+Note: This is required by 44 USC § 35, OMB A-130, FIPS-200, and M-24-15.
+
+---
+
+Terms: [Agency](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#agency), [Cloud Service Offering](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#cloud-service-offering), [Ongoing Authorization Report (OAR)](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#ongoing-authorization-report-oar)
+
+### Notify FedRAMP of Concerns¶
+
+CCM-AGM-NFR
+
+Former ID: FRR-CCM-AG-05
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+This FRR includes a notification requirement!
+
+Agencies MUST notify FedRAMP by sending an email to info@fedramp.gov if the information presented in an Ongoing Authorization Report, Quarterly Review, or other ongoing authorization data causes significant concerns that may lead the agency to stop operation of the cloud service offering.
+
+---
+
+Note: Agencies are required to notify FedRAMP by OMB Memorandum M-24-15 section IV (a).
+
+---
+
+### Notify FedRAMP After Requests¶
+
+CCM-AGM-NFA
+
+Former ID: FRR-CCM-AG-07
+
+Changelog:
+
+- 2026-02-04: Clarified notification requirements; removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+This FRR includes a notification requirement!
+
+Agencies MUST notify FedRAMP after requesting any additional information or materials from a cloud service provider beyond those FedRAMP requires by sending an email to info@fedramp.gov.
+
+---
+
+Note: Agencies are required to notify FedRAMP by OMB Memorandum M-24-15 section IV (a).
+
+---
+
+### No Additional Requirements¶
+
+CCM-AGM-NAR
+
+Former ID: FRR-CCM-AG-06
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Agencies MUST NOT place additional security requirements on cloud service providers beyond those required by FedRAMP UNLESS the head of the agency or an authorized delegate makes a determination that there is a demonstrable need for such; this does not apply to seeking clarification or asking general questions about authorization data.
+
+---
+
+Note: This is a statutory requirement in 44 USC § 3613 (e) related to the Presumption of Adequacy for a FedRAMP authorization.
+
+---
+
+Terms: [Agency](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#agency), [Authorization data](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#authorization-data)
+
+### Consider Security Category¶
+
+CCM-AGM-CSC
+
+Former ID: FRR-CCM-AG-02
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+Agencies SHOULD consider the Security Category noted in their Authorization to Operate of the federal information system that includes the cloud service offering in its boundary and assign appropriate information security resources for reviewing Ongoing Authorization Reports, attending Quarterly Reviews, and other ongoing authorization data.
+
+---
+
+Terms: [Agency](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#agency), [Authorization data](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#authorization-data), [Cloud Service Offering](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#cloud-service-offering), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review)
+
+### Senior Security Reviewer¶
+
+CCM-AGM-SSR
+
+Former ID: FRR-CCM-AG-03
+
+Changelog:
+
+- 2026-03-17: Changed mention of Security Category to security objective and added Low and Moderate.
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+LowModerateHigh
+
+Agencies MAY designate a senior information security official to review Ongoing Authorization Reports and represent the agency at Quarterly Reviews for cloud service offerings included in agency information systems with a Security Objective of Low.
+
+Agencies MAY designate a senior information security official to review Ongoing Authorization Reports and represent the agency at Quarterly Reviews for cloud service offerings included in agency information systems with a Security Objective of Moderate.
+
+Agencies SHOULD designate a senior information security official to review Ongoing Authorization Reports and represent the agency at Quarterly Reviews for cloud service offerings included in agency information systems with a Security Objective of High.
+
+---
+
+Terms: [Agency](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#agency), [Cloud Service Offering](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#cloud-service-offering), [Quarterly Review](https://www.fedramp.gov/docs/rev5/balance/fedramp-definitions/#quarterly-review)
+
+### Notify Provider of Concerns¶
+
+CCM-AGM-NPC
+
+Former ID: FRR-CCM-AG-04
+
+Changelog:
+
+- 2026-02-04: Removed italics and changed the ID as part of new standardization in v0.9.0-beta; no material changes.
+
+This FRR includes a notification requirement!
+
+Agencies SHOULD formally notify the provider if the information presented in an Ongoing Authorization Report, Quarterly Review, or other ongoing authorization data causes significant concerns that may lead the agency to remove the cloud service offering from operation.
+
+---

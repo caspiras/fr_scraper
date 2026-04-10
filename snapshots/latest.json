@@ -1,8 +1,8 @@
 {
-  "baseline_directory": "2026-04-08T130922Z-update",
-  "checked_at": "2026-04-08T13:09:22Z",
+  "baseline_directory": "2026-04-10T161518Z-update",
+  "checked_at": "2026-04-10T161518Z",
   "page_count": 36,
   "notices_count": 9,
   "scope": "https://www.fedramp.gov/docs/rev5/ (excluding /docs/20x/) + https://www.fedramp.gov/notices/",
-  "notes": "No changes detected since April 7 check. All 36 pages unchanged (VDR, CCM, SCN byte-for-byte identical to April 7). No new notices (still 9, latest 0009 dated 2026-03-25)."
+  "notes": "No changes since April 9 check. All 36 Rev5 doc pages and 9 notices are identical to the April 9 snapshot. SCN (22,516 bytes), CCM (22,394 bytes), VDR (37,444 bytes) byte-for-byte matches confirmed."
 }
