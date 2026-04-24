@@ -55,7 +55,9 @@ This project monitors TWO websites for changes:
    - **Rev5 Docs:** Crawl ALL pages starting from https://www.fedramp.gov/docs/rev5/
      - Extract all links under /docs/rev5/
      - Fetch EVERY page individually (40-50+ WebFetch calls)
-     - Save each as .html file in new snapshot directory
+     - **For each page:** Use WebFetch with prompt "Extract all content from the main documentation area as markdown"
+     - Save the COMPLETE markdown output as .html file in new snapshot directory
+     - **Critical:** Save FULL content, not summaries - this ensures ALL wording changes are detected
    - **Notices:** Fetch https://www.fedramp.gov/notices/
      - Extract all notice entries
      - Include in _meta.json
@@ -116,7 +118,9 @@ You MUST:
 2. Read: snapshots/latest.json → baseline_directory: "2026-04-09T151318Z-update"
 3. Calculate: April 10 - April 9 = 1 day ago
 4. Create: snapshots/2026-04-10T161518Z-update/
-5. Crawl: Fetch ALL pages from https://www.fedramp.gov/docs/rev5/ (fresh from website)
+5. Crawl: Fetch ALL pages from https://www.fedramp.gov/docs/rev5/ using WebFetch
+   - Prompt: "Extract all content from the main documentation area as markdown"
+   - Save COMPLETE markdown output (full content, not summaries)
 6. Crawl: Fetch https://www.fedramp.gov/notices/ (fresh from website)
 7. Compare: New content vs baseline content
 8. Write: snapshots/2026-04-10T161518Z-update/_meta.json
@@ -148,9 +152,11 @@ When user says "the website" or "what has changed":
 
 A complete snapshot MUST contain:
 - `_meta.json` file with all required fields
-- 40-50+ `.html` files (one per Rev5 doc page)
+- 40-50+ `.html` files (one per Rev5 doc page) containing FULL markdown content
 - All URLs listed in `_meta.json` urls array
 - Complete notices_snapshot array in `_meta.json`
+
+**Critical:** Each `.html` file must contain the COMPLETE markdown conversion from WebFetch (every word, every paragraph), not a summary. This ensures ALL wording changes are detected.
 
 A snapshot with ONLY `_meta.json` is INCOMPLETE and INVALID.
 

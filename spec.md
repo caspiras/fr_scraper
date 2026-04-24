@@ -161,10 +161,10 @@ mkdir -p "$SNAPSHOT_DIR"
    - Build a complete URL inventory
 
 3. **For EACH discovered page:**
-   - Fetch the full HTML with WebFetch
-   - Extract main content using selectors: `main`, `article`, `.content`
-   - Create a markdown summary (see format below)
-   - Save to `{snapshot_dir}/{sanitized_url}.html`
+   - Fetch with WebFetch using prompt: "Extract all content from the main documentation area as markdown"
+   - Save the COMPLETE markdown output (not a summary - save ALL text)
+   - Save to `{snapshot_dir}/{sanitized_url}.html` (filename ends in .html but contains full markdown text)
+   - This captures every word, enabling detection of any wording changes
 
 **Expected Page Count:** ~36-40 pages
 
@@ -180,33 +180,20 @@ https://www.fedramp.gov/docs/rev5/playbook/agency/authorization/
 
 ### Step 3: Extract and Save Page Content
 
-**For each page, create a markdown summary file:**
+**For each page, save the FULL content as markdown:**
 
-**Content to Extract:**
-1. Primary heading (H1 or page title)
-2. First paragraph or overview section
-3. Major section headings (H2, H3)
-4. Key bullet points or numbered lists
-5. Important links or references
-6. Any tables with critical data
+**Critical Requirement:** Save the COMPLETE content of each page, not a summary. This ensures ALL wording changes are detected.
 
-**Markdown Format:**
-```markdown
-# [Page Title]
+**Content to Save:**
+- Use WebFetch with a prompt like: "Extract all content from the main documentation area as markdown"
+- Save the ENTIRE markdown output (full paragraphs, all sections, all text)
+- Do NOT summarize or condense - save everything
+- This captures all wording changes, even minor text edits
 
-## Overview
-[First paragraph describing the page purpose]
-
-## [Major Section 1]
-- Key point 1
-- Key point 2
-
-## [Major Section 2]
-[Important content summary]
-
-## Links and References
-- [Link text](URL)
-```
+**Why Full Content:**
+- Summaries would miss minor wording changes
+- Full content enables detection of any text modification
+- Markdown format filters out navigation/HTML noise while preserving all documentation text
 
 **File Naming - URL Sanitization:**
 
@@ -440,12 +427,12 @@ EOF
 
 **CRITICAL: Use the same content extraction approach every time**
 
-- Same markdown format for all pages
-- Same selectors for content extraction
+- Same WebFetch prompt for all pages: "Extract all content from the main documentation area as markdown"
+- Always save COMPLETE markdown output, never summarize
 - Same URL sanitization rules
 - Same metadata structure
 
-**Why:** Inconsistent extraction makes comparison impossible. If format changes between runs, ALL pages will appear "changed" even when content is identical.
+**Why:** Inconsistent extraction makes comparison impossible. If format changes between runs, ALL pages will appear "changed" even when content is identical. Always capture full content to detect ALL wording changes.
 
 ---
 
@@ -455,9 +442,14 @@ EOF
    - Cause: Not saving `.html` files for each page
    - Fix: Ensure Step 3 saves a file for EVERY discovered URL
 
-2. **❌ Inconsistent content extraction**
-   - Cause: Changing how content is summarized between runs
-   - Fix: Use exact same extraction logic every time
+2. **❌ Saving summaries instead of full content**
+   - Cause: Summarizing or condensing page content
+   - Fix: Save the COMPLETE markdown output from WebFetch - every word, every paragraph
+   - Impact: Summaries miss wording changes; full content catches everything
+
+3. **❌ Inconsistent content extraction**
+   - Cause: Changing the WebFetch prompt or extraction method between runs
+   - Fix: Always use the same prompt and always save the complete output
 
 3. **❌ Missing pages**
    - Cause: Not crawling all links recursively

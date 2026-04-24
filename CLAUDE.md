@@ -83,7 +83,8 @@ When the user asks ANY variation of "what has changed?" or "check for changes":
      - For EACH discovered page, fetch it AND extract more links
      - Continue until NO new `/docs/rev5/` URLs are found
      - Fetch EVERY discovered page (typically 36-50+ pages)
-     - Save each page as `.html` file in snapshot directory
+     - **For each page:** Use WebFetch with prompt "Extract all content from the main documentation area as markdown"
+     - Save the COMPLETE markdown output as `.html` file in snapshot directory (full content, not summaries)
      - Track ALL discovered URLs in a list
    - **Notices**: Fetch https://www.fedramp.gov/notices/
      - Extract all notice entries
@@ -287,9 +288,12 @@ Agent:
 ## Tools You'll Use
 
 - **Bash** - Run `date -u` to get current timestamp
-- **Read** - Read spec.md, latest.json, baseline snapshots, HTML files for comparison
-- **Write** - Create snapshot directories, write HTML files, write _meta.json, update latest.json
+- **Read** - Read spec.md, latest.json, baseline snapshots, saved content files for comparison
+- **Write** - Create snapshot directories, write content files, write _meta.json, update latest.json
 - **WebFetch** - Fetch fresh content from both websites (40-50+ calls per check)
+  - Use prompt: "Extract all content from the main documentation area as markdown"
+  - Save the COMPLETE markdown response (full content, not summaries)
+  - Files are named `.html` but contain full markdown text
 
 ## URL to Filename Conversion
 
@@ -314,9 +318,11 @@ Rules:
 
 A valid snapshot MUST contain:
 - `_meta.json` file with all required fields (checked_at, page_count, notices_count, urls, notices_snapshot, etc.)
-- 40-50+ `.html` files (one per Rev5 doc page)
+- 40-50+ `.html` files (one per Rev5 doc page) containing FULL markdown content from WebFetch
 - All URLs listed in `_meta.json` urls array
 - Complete notices_snapshot array in `_meta.json`
+
+**Critical:** Each `.html` file must contain the COMPLETE markdown conversion from WebFetch, not a summary. This ensures ALL wording changes are detected.
 
 **A snapshot with ONLY `_meta.json` is INCOMPLETE and INVALID.**
 
